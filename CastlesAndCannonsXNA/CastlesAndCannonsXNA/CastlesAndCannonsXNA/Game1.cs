@@ -1,3 +1,15 @@
+/*
+ * 
+ * 
+ * 
+ *  YAY C#
+ * 
+ * 
+ * 
+ */
+
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,7 +83,6 @@ namespace CastlesAndCannonsXNA
                 this.Exit();
 
             // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
