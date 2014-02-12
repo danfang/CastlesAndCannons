@@ -3,7 +3,7 @@
  * 
  * 
  *  YAY C#
- * 
+ *  Inspired by Tyler Bauer
  * 
  * 
  */
