@@ -1,21 +1,3 @@
-/*
- * 
- * 
- * 
- *  YAY C#
- *  Inspired By Dan Fang
- *  Inspired by Tyler Bauer
- * 
- * 
- */
-
-/*
- *  For Justin to fix
- * 
- */
-
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
