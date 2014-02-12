@@ -1,3 +1,21 @@
+/*
+ * 
+ * 
+ * 
+ *  YAY C#
+ *  Inspired By Dan Fang
+ *  Inspired by Tyler Bauer
+ * 
+ * 
+ */
+
+/*
+ *  For Justin to fix
+ * 
+ */
+
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +36,6 @@ namespace CastlesAndCannonsXNA
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        int height;
-        int width;
-        bool toRecord;
-        double anchorTime;
-        SpriteFont font;
 
         public Game1()
         {
@@ -38,14 +51,9 @@ namespace CastlesAndCannonsXNA
         /// </summary>
         protected override void Initialize()
         {
-            base.Initialize();
             // TODO: Add your initialization logic here
-            height = graphics.GraphicsDevice.Viewport.Height;
-            width = graphics.GraphicsDevice.Viewport.Width;
-            toRecord = true;
-            anchorTime = 0;
-            font = Content.Load<SpriteFont>("font");
-            this.IsMouseVisible = true;
+
+            base.Initialize();
         }
 
         /// <summary>
@@ -76,23 +84,12 @@ namespace CastlesAndCannonsXNA
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (toRecord)
-            {
-                anchorTime = gameTime.TotalGameTime.TotalSeconds;
-                toRecord = false;
-            }
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // exits the game if q is pressed on the keyboard
-            if (Keyboard.GetState().IsKeyDown(Keys.Q))
-                this.Exit();
             // TODO: Add your update logic here
-
-            // exits the game if 3 seconds have passed
-            if (timeElapsed(gameTime, anchorTime, 3.0))
-               this.Exit();
+            base.Update(gameTime);
         }
 
         /// <summary>
@@ -102,26 +99,10 @@ namespace CastlesAndCannonsXNA
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Maroon);
+
             // TODO: Add your drawing code here
-            //BoundingSphere bs = new BoundingSphere(new Vector3(100, 100, 0), 100.0f);
-           
-            spriteBatch.Begin();
-            drawMessage(spriteBatch, "This is Castles and Cannons!", Color.White);
-            spriteBatch.End();
-        }
 
-        private bool timeElapsed(GameTime gameTime, double originalTime, double timeElapsed)
-        {
-            if (gameTime.TotalGameTime.TotalSeconds - originalTime >= timeElapsed)
-                return true;
-            return false;
-        }
-
-        private void drawMessage(SpriteBatch batch, string message, Color color)
-        {
-            Vector2 fontOrigin = font.MeasureString(message) / 2;
-            spriteBatch.DrawString(font, message, new Vector2(width / 2, height / 2),
-                                      color, 0, fontOrigin, 1.0f, SpriteEffects.None, 0.5f);
+            base.Draw(gameTime);
         }
     }
 }
