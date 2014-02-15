@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerPhysics;
 
 namespace CastlesAndCannonsMonoGame
 {
     class Cannonball
     {
-        public static enum State
+        public enum State
         {
 
         }
@@ -20,7 +21,6 @@ namespace CastlesAndCannonsMonoGame
         private int health;
         private float speed;
         private bool isAlive;
-        private Vector2 position;
 
         public Cannonball()
         {

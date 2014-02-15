@@ -6,19 +6,21 @@ using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerPhysics;
 
 namespace CastlesAndCannonsMonoGame
 {
     class Grid
     {
-        public static enum State
+        public enum State
         {
 
         }
 
         private Panel[,] panels;
         private int score;
-        private LinkedList<Cannonball> enemies = new LinkedList<Cannonball>();
+        private LinkedList<Cannonball> enemies;
+       
 
         public Grid()
         {
@@ -28,6 +30,7 @@ namespace CastlesAndCannonsMonoGame
 
         private void Initialize()
         {
+
         }
 
         private void LoadContent()
