@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+
+
 namespace CastlesAndCannonsMonoGame
 {
     /// <summary>
@@ -8,13 +10,16 @@ namespace CastlesAndCannonsMonoGame
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager _graphics;
-        SpriteBatch _spriteBatch;
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+
+        private Character c;
+        private Grid g;
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Assets";
         }
 
         /// <summary>
@@ -26,8 +31,9 @@ namespace CastlesAndCannonsMonoGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
             base.Initialize();
+
+
         }
 
         /// <summary>
@@ -37,7 +43,7 @@ namespace CastlesAndCannonsMonoGame
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
         }
@@ -59,8 +65,10 @@ namespace CastlesAndCannonsMonoGame
         protected override void Update(GameTime gameTime)
         {
             // TODO: Add your update logic here
-
             base.Update(gameTime);
+            
+            
+
         }
 
         /// <summary>
@@ -72,7 +80,6 @@ namespace CastlesAndCannonsMonoGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
             base.Draw(gameTime);
         }
     }
