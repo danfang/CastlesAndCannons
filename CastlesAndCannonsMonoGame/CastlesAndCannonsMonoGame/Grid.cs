@@ -38,6 +38,7 @@ namespace CastlesAndCannonsMonoGame
             enemies = new LinkedList<Cannonball>();
             c = new Character();
             PANEL_SIZE = (Game1.height - 100) / GRID_SIZE;
+            c = new Knight();
         }
 
         private void LoadContent()

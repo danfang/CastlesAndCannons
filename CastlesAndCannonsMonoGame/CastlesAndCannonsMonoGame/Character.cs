@@ -10,35 +10,18 @@ using FarseerPhysics;
 
 namespace CastlesAndCannonsMonoGame
 {
-    class Character
+    abstract class Character
     {
-        public Character()
-        {
-            Initialize();
-            LoadContent();
-        }
+        private int health;
+        private int mana;
+        private int armor;
+        private float speed;
+        private Vector2 position;
+        private int row;
+        private int column;
 
-        private void Initialize()
-        {
-        }
-
-        private void LoadContent()
-        {
-
-        }
-
-        public void UnloadContent()
-        {
-            
-        }
-
-        public void Update(GameTime gameTime)
-        {
-
-        }
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-
-        }
+        abstract public void UnloadContent();
+        abstract public void Update(GameTime gameTime);
+        abstract public void Draw(GameTime gameTime, SpriteBatch spriteBatch);
     }
 }
