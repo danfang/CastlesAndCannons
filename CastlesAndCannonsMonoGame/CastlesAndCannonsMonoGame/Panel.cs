@@ -12,6 +12,11 @@ namespace CastlesAndCannonsMonoGame
 {
     class Panel
     {
+        public enum Type
+        {
+
+        }
+
         public Panel()
         {
             Initialize();

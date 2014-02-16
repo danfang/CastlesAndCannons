@@ -17,9 +17,11 @@ namespace CastlesAndCannonsMonoGame
 
         }
 
+        public static int SIZE = 8; 
         private Panel[,] panels;
         private int score;
         private LinkedList<Cannonball> enemies;
+        private Character c;
        
 
         public Grid()
@@ -30,12 +32,21 @@ namespace CastlesAndCannonsMonoGame
 
         private void Initialize()
         {
-
+            panels = new Panel[SIZE, SIZE];
+            score = 0;
+            enemies = new LinkedList<Cannonball>();
+            c = new Character();
         }
 
         private void LoadContent()
         {
-
+            for(int row = 0; row < SIZE; row++)
+            {
+                for (int col = 0; col < SIZE; col++)
+                {
+                    panels[row, col] = new Panel();
+                }
+            }
         }
 
         public void UnloadContent()
@@ -45,11 +56,29 @@ namespace CastlesAndCannonsMonoGame
 
         public void Update(GameTime gameTime)
         {
+            c.Update(gameTime);
 
+            foreach (Panel p in panels)
+            {
+                p.Update(gameTime);
+            }
+
+            foreach (Cannonball c in enemies)
+            {
+                c.Update(gameTime);
+            }
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            foreach (Panel p in panels)
+            {
+                p.Draw(gameTime, spriteBatch);
+            }
 
+            foreach (Cannonball c in enemies)
+            {
+                c.Draw(gameTime, spriteBatch);
+            }
         }
     }
 }
