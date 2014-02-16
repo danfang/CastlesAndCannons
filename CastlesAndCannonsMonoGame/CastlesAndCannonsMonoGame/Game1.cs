@@ -1,6 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 
 namespace CastlesAndCannonsMonoGame
@@ -13,13 +20,14 @@ namespace CastlesAndCannonsMonoGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        private Character c;
+        private Player p;
         private Grid g;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Assets";
+            
         }
 
         /// <summary>
@@ -32,7 +40,7 @@ namespace CastlesAndCannonsMonoGame
         {
             // TODO: Add your initialization logic here
             base.Initialize();
-
+            g = new Grid();
 
         }
 
@@ -66,9 +74,8 @@ namespace CastlesAndCannonsMonoGame
         {
             // TODO: Add your update logic here
             base.Update(gameTime);
-            
-            
-
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+                App.Current.Exit();
         }
 
         /// <summary>
@@ -81,6 +88,10 @@ namespace CastlesAndCannonsMonoGame
 
             // TODO: Add your drawing code here
             base.Draw(gameTime);
+
+            spriteBatch.Begin();
+            g.Draw(gameTime, spriteBatch);
+            spriteBatch.End();
         }
     }
 }
