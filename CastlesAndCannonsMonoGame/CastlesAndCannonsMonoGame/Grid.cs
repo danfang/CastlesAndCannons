@@ -35,7 +35,7 @@ namespace CastlesAndCannonsMonoGame
             panels = new Panel[SIZE, SIZE];
             score = 0;
             enemies = new LinkedList<Cannonball>();
-            c = new Character();
+            c = new Knight();
         }
 
         private void LoadContent()
@@ -63,9 +63,9 @@ namespace CastlesAndCannonsMonoGame
                 p.Update(gameTime);
             }
 
-            foreach (Cannonball c in enemies)
+            foreach (Cannonball b in enemies)
             {
-                c.Update(gameTime);
+                b.Update(gameTime);
             }
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
