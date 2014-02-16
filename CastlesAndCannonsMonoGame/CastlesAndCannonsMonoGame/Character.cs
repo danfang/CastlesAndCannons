@@ -20,9 +20,18 @@ namespace CastlesAndCannonsMonoGame
         protected int row;
         protected int column;
 
-        public void UnloadContent();
-        public void Update(GameTime gameTime);
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+        public void UnloadContent()
+        {
+
+        }
+        public void Update(GameTime gameTime)
+        {
+
+        }
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            
+        }
 
         /*******************
          * GET/SET METHODS *

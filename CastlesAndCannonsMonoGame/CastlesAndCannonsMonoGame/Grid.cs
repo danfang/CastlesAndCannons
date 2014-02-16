@@ -71,6 +71,7 @@ namespace CastlesAndCannonsMonoGame
                 cannonball.Update(gameTime);
             }
         }
+
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (Panel p in panels)
@@ -82,6 +83,11 @@ namespace CastlesAndCannonsMonoGame
             {
                 cannonball.Draw(gameTime, spriteBatch);
             }
+        }
+
+        public Character GetCharacter()
+        {
+            return c;
         }
     }
 }

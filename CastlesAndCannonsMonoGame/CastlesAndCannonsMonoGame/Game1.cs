@@ -30,7 +30,7 @@ namespace CastlesAndCannonsMonoGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Assets";
-            
+
         }
 
         /// <summary>
@@ -43,11 +43,10 @@ namespace CastlesAndCannonsMonoGame
         {
             // TODO: Add your initialization logic here
             base.Initialize();
-            g = new Grid();
             height = graphics.GraphicsDevice.Viewport.Height;
             width = graphics.GraphicsDevice.Viewport.Width;
-            texture = Content.Load<Texture2D>("Tile");
-
+            g = new Grid();
+            texture = Content.Load<Texture2D>("Tile"); 
         }
 
         /// <summary>
@@ -93,11 +92,15 @@ namespace CastlesAndCannonsMonoGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            base.Draw(gameTime);
-
             spriteBatch.Begin();
             g.Draw(gameTime, spriteBatch);
+            //((Knight)g.GetCharacter()).Draw(gameTime, spriteBatch);
+            //spriteBatch.Draw(texture, new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, 
+            //    graphics.GraphicsDevice.Viewport.Height),
+            //    Color.White);
             spriteBatch.End();
+            base.Draw(gameTime);
+
         }
     }
 }
