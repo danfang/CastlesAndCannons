@@ -102,10 +102,15 @@ namespace CastlesAndCannonsMonoGame
             }
         }
 
-        public Vector2 Vector(int x, int y)
+        public Vector2 GetVector()
         {
             return position;
+        }
 
+        public void SetVector(int x, int y)
+        {
+            position.X = x;
+            position.Y = y;
         }
 
 
