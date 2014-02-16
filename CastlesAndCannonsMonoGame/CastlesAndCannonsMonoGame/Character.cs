@@ -10,18 +10,104 @@ using FarseerPhysics;
 
 namespace CastlesAndCannonsMonoGame
 {
-    abstract class Character
+    class Character
     {
-        private int health;
-        private int mana;
-        private int armor;
-        private float speed;
-        private Vector2 position;
-        private int row;
-        private int column;
+        protected int health;
+        protected int mana;
+        protected int armor;
+        protected float speed;
+        protected Vector2 position;
+        protected int row;
+        protected int column;
 
-        abstract public void UnloadContent();
-        abstract public void Update(GameTime gameTime);
-        abstract public void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+        public void UnloadContent();
+        public void Update(GameTime gameTime);
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+
+        /*******************
+         * GET/SET METHODS *
+         *******************/
+        public int Health
+        {
+            get
+            {
+                return health;
+            }
+            set
+            {
+                health = value;
+            }
+
+        }
+
+        public int Mana
+        {
+            get
+            {
+                return mana;
+            }
+            set
+            {
+                mana = value;
+            }
+
+        }
+
+        public int Armor
+        {
+            get
+            {
+                return armor;
+            }
+            set
+            {
+                armor = value;
+            }
+
+        }
+
+        public float Speed
+        {
+            get
+            {
+                return speed;
+            }
+            set
+            {
+                speed = value;
+            }
+        }
+
+        public int Row
+        {
+            get
+            {
+                return row;
+            }
+            set
+            {
+                row = value;
+            }
+        }
+
+        public int Column
+        {
+            get
+            {
+                return column;
+            }
+            set
+            {
+                column = value;
+            }
+        }
+
+        public Vector2 Vector(int x, int y)
+        {
+            return position;
+
+        }
+
+
     }
 }
