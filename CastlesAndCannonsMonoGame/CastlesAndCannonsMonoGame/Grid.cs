@@ -17,7 +17,8 @@ namespace CastlesAndCannonsMonoGame
 
         }
 
-        public static int SIZE = 8; 
+        public static int GRID_SIZE = 8;
+        public static int PANEL_SIZE;
         private Panel[,] panels;
         private int score;
         private LinkedList<Cannonball> enemies;
@@ -32,19 +33,21 @@ namespace CastlesAndCannonsMonoGame
 
         private void Initialize()
         {
-            panels = new Panel[SIZE, SIZE];
+            panels = new Panel[GRID_SIZE, GRID_SIZE];
             score = 0;
             enemies = new LinkedList<Cannonball>();
+            c = new Character();
+            PANEL_SIZE = (Game1.height - 100) / GRID_SIZE;
             c = new Knight();
         }
 
         private void LoadContent()
         {
-            for(int row = 0; row < SIZE; row++)
+            for(int row = 0; row < GRID_SIZE; row++)
             {
-                for (int col = 0; col < SIZE; col++)
+                for (int col = 0; col < GRID_SIZE; col++)
                 {
-                    panels[row, col] = new Panel();
+                    panels[row, col] = new Panel(row * PANEL_SIZE, col * PANEL_SIZE, PANEL_SIZE - 1);
                 }
             }
         }
@@ -63,9 +66,9 @@ namespace CastlesAndCannonsMonoGame
                 p.Update(gameTime);
             }
 
-            foreach (Cannonball b in enemies)
+            foreach (Cannonball cannonball in enemies)
             {
-                b.Update(gameTime);
+                cannonball.Update(gameTime);
             }
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -75,9 +78,9 @@ namespace CastlesAndCannonsMonoGame
                 p.Draw(gameTime, spriteBatch);
             }
 
-            foreach (Cannonball c in enemies)
+            foreach (Cannonball cannonball in enemies)
             {
-                c.Draw(gameTime, spriteBatch);
+                cannonball.Draw(gameTime, spriteBatch);
             }
         }
     }

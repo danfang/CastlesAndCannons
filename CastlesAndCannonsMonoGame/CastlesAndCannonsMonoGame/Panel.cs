@@ -12,13 +12,15 @@ namespace CastlesAndCannonsMonoGame
 {
     class Panel
     {
+        private Rectangle bounds;
         public enum Type
         {
 
         }
 
-        public Panel()
+        public Panel(int x, int y, int size)
         {
+            bounds = new Rectangle(x, y, size, size);
             Initialize();
             LoadContent();
         }
@@ -39,11 +41,12 @@ namespace CastlesAndCannonsMonoGame
 
         public void Update(GameTime gameTime)
         {
+            
 
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-
+            spriteBatch.Draw(Game1.texture, bounds, Color.Beige);
         }
     }
 }

@@ -22,6 +22,9 @@ namespace CastlesAndCannonsMonoGame
 
         private Player p;
         private Grid g;
+        public static int height;
+        public static int width;
+        public static Texture2D texture;
 
         public Game1()
         {
@@ -41,6 +44,9 @@ namespace CastlesAndCannonsMonoGame
             // TODO: Add your initialization logic here
             base.Initialize();
             g = new Grid();
+            height = graphics.GraphicsDevice.Viewport.Height;
+            width = graphics.GraphicsDevice.Viewport.Width;
+            texture = Content.Load<Texture2D>("Tile");
 
         }
 
