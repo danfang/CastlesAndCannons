@@ -1,48 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DirectedGraph Layout="Sugiyama" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
   <Nodes>
-    <Node Id="BooleanIsAlive" Bounds="343.878427203089,267.88000034354,80.8833333333333,25.96" Label="bool isAlive" />
-    <Node Id="Cannonball" Bounds="323.878427203089,227.88000034354,319.753584205195,197.879999046455" Group="Expanded" />
-    <Node Id="Character" Bounds="673.635430532353,227.879999866768,292.239577546667,197.88" Group="Expanded" />
-    <Node Id="CharacterC" Bounds="1078.01221930569,95.96,79.4738320042316,25.9599999931641" Label="Character c" />
-    <Node Id="CharacterC1" Bounds="1197.44855263902,323.839999866768,79.4966666666669,25.96" Label="Character c" />
-    <Node Id="DoubleSpeed" Bounds="693.635430532353,379.799999866768,92.1766666666667,25.96" Label="double speed" />
-    <Node Id="Draw(" Bounds="986.024387301454,40,53.2600000000002,25.96" Label="draw()" />
-    <Node Id="Enum" Bounds="20,379.799999866764,86.2081503428132,25.9599999931568" Label="enum STATE" />
-    <Node Id="EnumSTATE" Bounds="457.302335339176,323.84000034354,86.1430822160874,25.9599998736035" Label="enum STATE" />
-    <Node Id="FloatSpeed" Bounds="343.878427203089,379.800000217144,79.0158294003907,25.9599991728516" Label="float speed" />
-    <Node Id="Game" Bounds="966.024387301454,0,211.461664008463,197.879999866768" Group="Expanded" />
-    <Node Id="GenerateEnemies()" Bounds="136.208150342813,379.799999866764,117.969133586248,25.9599999931568" Label="generateEnemies()" />
-    <Node Id="Get()" Bounds="1488.38521930569,267.879999866768,149.316666666667,25.96" Label="playSound(string sound)" />
-    <Node Id="Get/set()" Bounds="1197.44855263902,267.879999866768,64.7633333333333,25.96" Label="get/set()" />
-    <Node Id="Grid" Bounds="0,227.879999873615,293.510438611372,197.879999986306" Group="Expanded" Label="Grid" />
-    <Node Id="GridG" Bounds="986.024387301454,151.919999993164,52.7070036515788,25.9599998736036" Label="Grid g" />
-    <Node Id="IntArmor" Bounds="454.761760536422,267.88000034354,68.8771539025975,25.9599999944629" Label="int armor" />
-    <Node Id="IntArmor1" Bounds="876.98935551902,267.879999866768,68.8856525599999,25.96" Label="int armor" />
-    <Node Id="IntColumn" Bounds="793.718325359019,323.839999866768,76.3963113066668,25.96" Label="int column" />
-    <Node Id="IntHealth" Bounds="553.63891443902,267.88000034354,69.9930969692645,25.9599999944629" Label="int health" />
-    <Node Id="IntHealth1" Bounds="693.635430532353,323.839999866768,70.0828948266667,25.96" Label="int health" />
-    <Node Id="IntMana" Bounds="780.562097199019,267.879999866768,66.4272583200004,25.96" Label="int mana" />
-    <Node Id="IntRow" Bounds="693.635430532353,267.879999866768,56.9266666666667,25.96" Label="int row" />
-    <Node Id="IntScore" Bounds="111.987736107677,323.839999873607,65.155174767965,25.9599999931568" Label="int score" />
-    <Node Id="LingTimeElapsed" Bounds="1310.94521930569,379.799999866768,107.116666666667,25.96" Label="ling timeElapsed" />
-    <Node Id="LinkedList&lt;Cannonball&gt;Enemies" Bounds="20,267.879999873615,195.942165786667,25.9599999999927" Label="LinkedList&lt;Cannonball&gt; enemies" />
-    <Node Id="List&lt;Save&gt;Saves" Bounds="1016.63355263902,351.819999866768,110.243333333333,25.96" Label="List&lt;Save&gt; saves" />
-    <Node Id="Map&lt;string,Sound&gt;AllSounds" Bounds="1488.38521930569,379.799999866768,184.74,25.96" Label="Map&lt;string, Sound&gt; allSounds" />
-    <Node Id="Panel" Bounds="207.142910875642,323.839999873607,66.3675277357303,25.9599999931568" Label="Panel[] p" />
-    <Node Id="Player" Bounds="996.63355263902,255.859999866768,150.243333333333,141.92" Group="Expanded" Label="Player" />
-    <Node Id="PrintToFile()" Bounds="1197.44855263902,379.799999866768,83.4966666666669,25.96" Label="printToFile()" />
-    <Node Id="ReadInput()" Bounds="1292.21188597235,267.879999866768,78.7566666666667,25.96" Label="readInput()" />
-    <Node Id="Render()" Bounds="20,323.839999873607,61.9877361076771,25.9599999931568" Label="render()" />
-    <Node Id="Render()1" Bounds="986.024387301454,95.96,61.9878320042317,25.9599999931641" Label="render()" />
-    <Node Id="Save" Bounds="1177.44855263902,227.879999866768,260.613333333334,197.88" Group="Expanded" />
-    <Node Id="Sound(stringSound,SoundS)" Bounds="1488.38521930569,323.839999866768,173.2,25.96" Label="sound(string sound, sound s)" />
-    <Node Id="Sounds" Bounds="1468.38521930569,227.879999866768,224.74,197.88" Group="Expanded" Label="Sound" />
-    <Node Id="StringNae" Bounds="1306.94521930569,323.839999866768,82.8933333333334,25.96" Label="string name" />
-    <Node Id="ToString()" Bounds="1016.63355263902,295.859999866768,69.7133333333336,25.96" Label="toString()" />
-    <Node Id="Update()" Bounds="1069.28438730145,40,64.5999999999999,25.96" Label="update()" />
-    <Node Id="Vector2Pos" Bounds="343.878427203089,323.84000034354,83.4239081360872,25.9599998736036" Label="Vector2 pos" />
-    <Node Id="Vector2Position" Bounds="815.812097199019,379.799999866768,107.176666666667,25.96" Label="Vector2 position" />
+    <Node Id="BooleanIsAlive" Bounds="20,295.860000343529,80.8833333333333,25.96" Label="bool isAlive" />
+    <Node Id="Cannonball" Bounds="0,255.860000343529,319.753584205195,197.879999046455" Group="Expanded" />
+    <Node Id="Character" Bounds="349.757003329264,255.859999866757,292.239577546667,197.88" Group="Expanded" />
+    <Node Id="CharacterC" Bounds="692.911841155426,267.879999873604,79.4966666666667,25.96" Label="Character c" />
+    <Node Id="CharacterC1" Bounds="1232.57012543593,351.819999866757,79.4966666666669,25.96" Label="Character c" />
+    <Node Id="DoubleSpeed" Bounds="369.757003329264,407.779999866757,92.1766666666667,25.96" Label="double speed" />
+    <Node Id="Draw(" Bounds="1028.58287610048,40,53.2600000000002,25.96" Label="draw()" />
+    <Node Id="Enum" Bounds="884.434543659121,379.799999873596,86.2081503428132,25.9599999931568" Label="enum STATE" />
+    <Node Id="EnumSTATE" Bounds="133.423908136087,351.820000343529,86.1430822160874,25.9599998736035" Label="enum STATE" />
+    <Node Id="FloatSpeed" Bounds="20,407.780000217133,79.0158294003907,25.9599991728517" Label="float speed" />
+    <Node Id="Game" Bounds="1008.58287610048,0,196.587832004232,197.879999873604" Group="Expanded" />
+    <Node Id="GenerateEnemies()" Bounds="692.911841155426,435.759999866753,117.969133586248,25.9599999931568" Label="generateEnemies()" />
+    <Node Id="Get()" Bounds="1523.5067921026,295.859999866757,149.316666666667,25.96" Label="playSound(string sound)" />
+    <Node Id="Get/set()" Bounds="1232.57012543593,295.859999866757,64.7633333333333,25.96" Label="get/set()" />
+    <Node Id="Grid" Bounds="672.911841155426,227.879999873604,327.929901894344,253.839999986306" Group="Expanded" Label="Grid" />
+    <Node Id="GridG" Bounds="1028.58287610048,151.92,52.7070036515788,25.9599998736036" Label="Grid g" />
+    <Node Id="IntArmor" Bounds="130.883333333333,295.860000343529,68.8771539025975,25.9599999944629" Label="int armor" />
+    <Node Id="IntArmor1" Bounds="553.110928315931,295.859999866757,68.8856525599999,25.96" Label="int armor" />
+    <Node Id="IntColumn" Bounds="469.839898155931,351.819999866757,76.3963113066668,25.96" Label="int column" />
+    <Node Id="IntHealth" Bounds="229.760487235931,295.860000343529,69.9930969692646,25.9599999944629" Label="int health" />
+    <Node Id="IntHealth1" Bounds="369.757003329264,351.819999866757,70.0828948266667,25.96" Label="int health" />
+    <Node Id="IntMana" Bounds="456.683669995931,295.859999866757,66.4272583200004,25.96" Label="int mana" />
+    <Node Id="IntRow" Bounds="369.757003329264,295.859999866757,56.9266666666667,25.96" Label="int row" />
+    <Node Id="IntScore" Bounds="692.911841155426,379.799999873596,65.155174767965,25.9599999931568" Label="int score" />
+    <Node Id="LingTimeElapsed" Bounds="1346.0667921026,407.779999866757,107.116666666667,25.96" Label="ling timeElapsed" />
+    <Node Id="LinkedList&lt;Cannonball&gt;Enemies" Bounds="692.911841155426,323.839999873604,195.942165786667,25.9599999999928" Label="LinkedList&lt;Cannonball&gt; enemies" />
+    <Node Id="List&lt;Save&gt;Saves" Bounds="1051.75512543593,379.799999866757,110.243333333333,25.96" Label="List&lt;Save&gt; saves" />
+    <Node Id="Map&lt;string,Sound&gt;AllSounds" Bounds="1523.5067921026,407.779999866757,184.74,25.96" Label="Map&lt;string, Sound&gt; allSounds" />
+    <Node Id="Panel" Bounds="788.067015923391,379.799999873596,66.3675277357302,25.9599999931568" Label="Panel[] p" />
+    <Node Id="Player" Bounds="1031.75512543593,283.839999866757,150.243333333333,141.92" Group="Expanded" Label="Player" />
+    <Node Id="PlayerP" Bounds="1111.84287610048,40,62.3299999999999,25.96" Label="Player p" />
+    <Node Id="PrintToFile()" Bounds="1232.57012543593,407.779999866757,83.4966666666669,25.96" Label="printToFile()" />
+    <Node Id="ReadInput()" Bounds="1327.33345876926,295.859999866757,78.7566666666667,25.96" Label="readInput()" />
+    <Node Id="Render()" Bounds="918.854006942093,323.839999873604,61.9877361076772,25.9599999931568" Label="render()" />
+    <Node Id="Render()1" Bounds="1123.18287610048,95.96,61.9878320042317,25.9599999931641" Label="render()" />
+    <Node Id="Save" Bounds="1212.57012543593,255.859999866757,260.613333333334,197.88" Group="Expanded" />
+    <Node Id="Sound(stringSound,SoundS)" Bounds="1523.5067921026,351.819999866757,173.2,25.96" Label="sound(string sound, sound s)" />
+    <Node Id="Sounds" Bounds="1503.5067921026,255.859999866757,224.74,197.88" Group="Expanded" Label="Sound" />
+    <Node Id="StringNae" Bounds="1342.0667921026,351.819999866757,82.8933333333334,25.96" Label="string name" />
+    <Node Id="ToString()" Bounds="1051.75512543593,323.839999866757,69.7133333333336,25.96" Label="toString()" />
+    <Node Id="Update()" Bounds="1028.58287610048,95.96,64.5999999999999,25.96" Label="update()" />
+    <Node Id="Vector2Pos" Bounds="20,351.820000343529,83.4239081360872,25.9599998736036" Label="Vector2 pos" />
+    <Node Id="Vector2Position" Bounds="491.933669995931,407.779999866757,107.176666666667,25.96" Label="Vector2 position" />
   </Nodes>
   <Links>
     <Link Source="Cannonball" Target="BooleanIsAlive" Category="Contains" />
@@ -58,17 +59,18 @@
     <Link Source="Character" Target="IntMana" Category="Contains" />
     <Link Source="Character" Target="IntRow" Category="Contains" />
     <Link Source="Character" Target="Vector2Position" Category="Contains" />
-    <Link Source="Game" Target="Cannonball" Bounds="651.848937988281,130.66130065918,314.175476074219,103.395309448242" />
-    <Link Source="Game" Target="Character" Bounds="935.842956542969,194.350830078125,30.4026489257813,27.4926910400391" />
-    <Link Source="Game" Target="CharacterC" Category="Contains" />
+    <Link Source="Game" Target="Cannonball" Bounds="328.145812988281,118.146881103516,680.437072753906,143.703796386719" />
+    <Link Source="Game" Target="Character" Bounds="629.76611328125,125.998245239258,378.816772460938,124.385192871094" />
     <Link Source="Game" Target="Draw(" Category="Contains" />
-    <Link Source="Game" Target="Grid" Bounds="301.696685791016,115.915824890137,664.327728271484,117.25952911377" />
+    <Link Source="Game" Target="Grid" Bounds="977.343688964844,192.086227416992,31.2391967773438,29.6031646728516" />
     <Link Source="Game" Target="GridG" Category="Contains" />
-    <Link Source="Game" Target="Player" Bounds="1071.75524902344,197.880004882813,0,48.9799957275391" />
+    <Link Source="Game" Target="Player" Bounds="1106.87683105469,197.880004882813,0,76.9599914550781" />
+    <Link Source="Game" Target="PlayerP" Category="Contains" />
     <Link Source="Game" Target="Render()1" Category="Contains" />
-    <Link Source="Game" Target="Save" Bounds="1173.98315429688,197.650604248047,24.8321533203125,23.977783203125" />
-    <Link Source="Game" Target="Sounds" Bounds="1177.48608398438,133.349502563477,283.08447265625,104.812576293945" />
+    <Link Source="Game" Target="Save" Bounds="1198.13696289063,197.880004882813,47.3775634765625,51.3644714355469" />
+    <Link Source="Game" Target="Sounds" Bounds="1205.17065429688,138.31689453125,290.636352539063,126.980804443359" />
     <Link Source="Game" Target="Update()" Category="Contains" />
+    <Link Source="Grid" Target="CharacterC" Category="Contains" />
     <Link Source="Grid" Target="Enum" Category="Contains" />
     <Link Source="Grid" Target="GenerateEnemies()" Category="Contains" />
     <Link Source="Grid" Target="IntScore" Category="Contains" />
