@@ -12,14 +12,14 @@ namespace CastlesAndCannonsMonoGame
 {
     class Knight : Character
     {
-        public Knight(Vector2 pos)
+        public Knight(Vector2 pos, int newSize)
         {
             health = 100;
             mana = 100;
             armor = 2;
             speed = 2.5f;
             position = pos;
-            size = 100;
+            size = newSize;
             bounds = new Rectangle((int)position.X, (int)position.Y, size, size);
         }
 

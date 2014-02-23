@@ -53,7 +53,7 @@ namespace CastlesAndCannonsMonoGame
                     panels[row, col] = new Panel(GRID_WIDTH_OFFSET + row * PANEL_SIZE, GRID_HEIGHT_OFFSET + col * PANEL_SIZE, PANEL_SIZE);
                 }
             }
-           c = new Knight(panels[2, 2].getPosition());
+           c = new Knight(panels[2, 2].getPosition(), PANEL_SIZE);
         }
 
         public void UnloadContent()
