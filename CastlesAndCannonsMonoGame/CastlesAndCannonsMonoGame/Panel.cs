@@ -46,7 +46,7 @@ namespace CastlesAndCannonsMonoGame
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Game1.texture, bounds, Color.Beige);
+            spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.Beige);
         }
     }
 }
