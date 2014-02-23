@@ -50,10 +50,10 @@ namespace CastlesAndCannonsMonoGame
             {
                 for (int col = 0; col < GRID_SIZE; col++)
                 {
-                    panels[row, col] = new Panel(GRID_WIDTH_OFFSET + row * PANEL_SIZE, GRID_HEIGHT_OFFSET + col * PANEL_SIZE, PANEL_SIZE);
+                    panels[row, col] = new Panel(GRID_HEIGHT_OFFSET + row * PANEL_SIZE, GRID_WIDTH_OFFSET + col * PANEL_SIZE, PANEL_SIZE);
                 }
             }
-           c = new Knight(panels[2, 2].getPosition(), PANEL_SIZE);
+           c = new Knight(panels[2, 2].getPosition(), PANEL_SIZE, 2, 2);
         }
 
         public void UnloadContent()
@@ -63,8 +63,6 @@ namespace CastlesAndCannonsMonoGame
 
         public void Update(GameTime gameTime)
         {
-            c.Update(gameTime);
-
             foreach (Panel p in panels)
             {
                 p.Update(gameTime);
@@ -77,8 +75,33 @@ namespace CastlesAndCannonsMonoGame
 
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
-
+                if (c.Column > 0)
+                {
+                    c.move(panels[c.Row, c.Column - 1].getPosition(), c.Row, c.Column - 1);
+                }
+            } 
+            else if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                if (c.Column < Math.Sqrt(panels.Length) - 1)
+                {
+                    c.move(panels[c.Row, c.Column + 1].getPosition(), c.Row, c.Column + 1);
+                }
             }
+            else if (Keyboard.GetState().IsKeyDown(Keys.W))
+            {
+                if (c.Row > 0)
+                {
+                    c.move(panels[c.Row - 1, c.Column].getPosition(), c.Row - 1, c.Column);
+                }
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                if (c.Row < Math.Sqrt(panels.Length) - 1)
+                {
+                    c.move(panels[c.Row + 1, c.Column].getPosition(), c.Row + 1, c.Column);
+                }
+            }
+            c.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
