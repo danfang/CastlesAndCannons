@@ -36,6 +36,11 @@ namespace CastlesAndCannonsMonoGame
         /*******************
          * GET/SET METHODS *
          *******************/
+
+        public void move(Vector2 newPos)
+        {
+            position = newPos;
+        }
         public int Health
         {
             get

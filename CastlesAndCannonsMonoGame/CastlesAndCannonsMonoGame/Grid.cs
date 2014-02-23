@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using FarseerPhysics;
 
 namespace CastlesAndCannonsMonoGame
@@ -36,9 +37,9 @@ namespace CastlesAndCannonsMonoGame
             panels = new Panel[GRID_SIZE, GRID_SIZE];
             score = 0;
             enemies = new LinkedList<Cannonball>();
-            c = new Character();
+            //c = new Character();
             PANEL_SIZE = (Game1.height - 100) / GRID_SIZE;
-            c = new Knight();
+            c = new Knight(panels[2, 2].getPosition());
         }
 
         private void LoadContent()
@@ -69,6 +70,11 @@ namespace CastlesAndCannonsMonoGame
             foreach (Cannonball cannonball in enemies)
             {
                 cannonball.Update(gameTime);
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+
             }
         }
 
