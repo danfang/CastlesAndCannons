@@ -39,11 +39,9 @@ namespace CastlesAndCannonsMonoGame
             panels = new Panel[GRID_SIZE, GRID_SIZE];
             score = 0;
             enemies = new LinkedList<Cannonball>();
-            //c = new Character();
             PANEL_SIZE = (Game1.height - 100) / GRID_SIZE;
             GRID_WIDTH_OFFSET = (Game1.width - (PANEL_SIZE * GRID_SIZE)) / 2;
             GRID_HEIGHT_OFFSET = (Game1.height - (PANEL_SIZE * GRID_SIZE)) / 2;
-            c = new Knight(panels[2, 2].getPosition());
         }
 
         private void LoadContent()
@@ -55,6 +53,7 @@ namespace CastlesAndCannonsMonoGame
                     panels[row, col] = new Panel(GRID_WIDTH_OFFSET + row * PANEL_SIZE, GRID_HEIGHT_OFFSET + col * PANEL_SIZE, PANEL_SIZE);
                 }
             }
+           c = new Knight(panels[2, 2].getPosition());
         }
 
         public void UnloadContent()
@@ -93,6 +92,7 @@ namespace CastlesAndCannonsMonoGame
             {
                 cannonball.Draw(gameTime, spriteBatch);
             }
+            ((Knight)c).Draw(gameTime, spriteBatch);
         }
 
         public Character GetCharacter()
