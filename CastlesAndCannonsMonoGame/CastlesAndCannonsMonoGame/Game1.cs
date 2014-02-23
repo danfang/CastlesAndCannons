@@ -93,10 +93,6 @@ namespace CastlesAndCannonsMonoGame
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             g.Draw(gameTime, spriteBatch);
-            //((Knight)g.GetCharacter()).Draw(gameTime, spriteBatch);
-            //spriteBatch.Draw(texture, new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, 
-            //    graphics.GraphicsDevice.Viewport.Height),
-            //    Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
 
