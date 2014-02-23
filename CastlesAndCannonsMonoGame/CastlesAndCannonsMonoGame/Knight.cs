@@ -12,9 +12,13 @@ namespace CastlesAndCannonsMonoGame
 {
     class Knight : Character
     {
-        public Knight()
+        public Knight(Vector2 pos)
         {
-
+            health = 100;
+            mana = 100;
+            armor = 2;
+            speed = 2.5f;
+            position = pos;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
