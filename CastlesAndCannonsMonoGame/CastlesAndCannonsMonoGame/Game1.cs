@@ -46,6 +46,7 @@ namespace CastlesAndCannonsMonoGame
             width = graphics.GraphicsDevice.Viewport.Width;
             g = new Grid();
             Textures.LoadContent(this);
+            this.IsMouseVisible = true;
         }
 
         /// <summary>

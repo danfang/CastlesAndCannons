@@ -19,11 +19,13 @@ namespace CastlesAndCannonsMonoGame
             armor = 2;
             speed = 2.5f;
             position = pos;
+            size = 100;
+            bounds = new Rectangle((int)position.X, (int)position.Y, size, size);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Textures.knightTexture, position, Color.White);
+            spriteBatch.Draw(Textures.knightTexture, bounds, Color.White);
         }
 
     }

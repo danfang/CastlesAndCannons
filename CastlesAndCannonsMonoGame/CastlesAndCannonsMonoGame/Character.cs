@@ -19,6 +19,8 @@ namespace CastlesAndCannonsMonoGame
         protected Vector2 position;
         protected int row;
         protected int column;
+        protected Rectangle bounds;
+        protected int size;
 
         public void UnloadContent()
         {
