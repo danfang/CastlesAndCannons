@@ -23,7 +23,7 @@ namespace CastlesAndCannonsMonoGame
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Game1.texture, Vector2.Zero, Color.Black);
+            spriteBatch.Draw(Textures.knightTexture, Vector2.Zero, Color.Black);
         }
 
     }

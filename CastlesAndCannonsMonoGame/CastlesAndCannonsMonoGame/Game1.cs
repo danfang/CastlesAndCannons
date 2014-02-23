@@ -24,7 +24,6 @@ namespace CastlesAndCannonsMonoGame
         private Grid g;
         public static int height;
         public static int width;
-        public static Texture2D texture;
 
         public Game1()
         {
@@ -46,7 +45,7 @@ namespace CastlesAndCannonsMonoGame
             height = graphics.GraphicsDevice.Viewport.Height;
             width = graphics.GraphicsDevice.Viewport.Width;
             g = new Grid();
-            texture = Content.Load<Texture2D>("Tile"); 
+            Textures.LoadContent(this);
         }
 
         /// <summary>
@@ -79,7 +78,7 @@ namespace CastlesAndCannonsMonoGame
         {
             // TODO: Add your update logic here
             base.Update(gameTime);
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                 App.Current.Exit();
         }
 

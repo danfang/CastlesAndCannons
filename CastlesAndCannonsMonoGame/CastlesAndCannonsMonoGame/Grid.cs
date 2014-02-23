@@ -20,6 +20,8 @@ namespace CastlesAndCannonsMonoGame
 
         public static int GRID_SIZE = 8;
         public static int PANEL_SIZE;
+        public static int GRID_WIDTH_OFFSET;
+        public static int GRID_HEIGHT_OFFSET;
         private Panel[,] panels;
         private int score;
         private LinkedList<Cannonball> enemies;
@@ -39,6 +41,8 @@ namespace CastlesAndCannonsMonoGame
             enemies = new LinkedList<Cannonball>();
             //c = new Character();
             PANEL_SIZE = (Game1.height - 100) / GRID_SIZE;
+            GRID_WIDTH_OFFSET = (Game1.width - (PANEL_SIZE * GRID_SIZE)) / 2;
+            GRID_HEIGHT_OFFSET = (Game1.height - (PANEL_SIZE * GRID_SIZE)) / 2;
             c = new Knight(panels[2, 2].getPosition());
         }
 
@@ -48,7 +52,7 @@ namespace CastlesAndCannonsMonoGame
             {
                 for (int col = 0; col < GRID_SIZE; col++)
                 {
-                    panels[row, col] = new Panel(row * PANEL_SIZE, col * PANEL_SIZE, PANEL_SIZE - 1);
+                    panels[row, col] = new Panel(GRID_WIDTH_OFFSET + row * PANEL_SIZE, GRID_HEIGHT_OFFSET + col * PANEL_SIZE, PANEL_SIZE);
                 }
             }
         }
