@@ -17,7 +17,7 @@ namespace CastlesAndCannonsMonoGame
         public static void LoadContent(Game game)
         {
             normalPanelTexture = game.Content.Load<Texture2D>("Tile");
-            knightTexture = game.Content.Load<Texture2D>("Tile");
+            knightTexture = game.Content.Load<Texture2D>("KnightSpriteTemp");
         }
     }
 }
