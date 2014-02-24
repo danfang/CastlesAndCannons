@@ -73,7 +73,6 @@ namespace CastlesAndCannonsMonoGame
             mousePosition.Y = Mouse.GetState().Y;
             c.Update(gameTime);
             elapsedGameTime += (float) gameTime.ElapsedGameTime.TotalSeconds;
-
             ((Knight) c).Update(gameTime);
 
             foreach (Panel p in panels)
