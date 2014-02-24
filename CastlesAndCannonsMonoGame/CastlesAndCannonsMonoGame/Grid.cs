@@ -59,7 +59,7 @@ namespace CastlesAndCannonsMonoGame
                     panels[row, col] = new Panel(GRID_HEIGHT_OFFSET + row * PANEL_SIZE, GRID_WIDTH_OFFSET + col * PANEL_SIZE, PANEL_SIZE);
                 }
             }
-           c = new Knight(panels[2, 2].getPosition(), PANEL_SIZE, 2, 2);
+           c = new Knight(panels[2, 2].GetPosition(), PANEL_SIZE, 2, 2);
         }
 
         public void UnloadContent()
@@ -71,10 +71,8 @@ namespace CastlesAndCannonsMonoGame
         {
             mousePosition.X = Mouse.GetState().X;
             mousePosition.Y = Mouse.GetState().Y;
-            c.Update(gameTime);
-            elapsedGameTime += (float) gameTime.ElapsedGameTime.TotalSeconds;
 
-            ((Knight) c).Update(gameTime);
+            elapsedGameTime += (float) gameTime.ElapsedGameTime.TotalSeconds;
 
             foreach (Panel p in panels)
             {
@@ -82,57 +80,13 @@ namespace CastlesAndCannonsMonoGame
                 p.Slashed(false);
             }
 
-
             foreach (Cannonball cannonball in enemies)
             {
                 cannonball.Update(gameTime);
             }
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-            {
-                mouseClick.X = Mouse.GetState().X;
-                mouseClick.Y = Mouse.GetState().Y;
-                ((Knight)c).Slash(mouseClick);
-                switch (((Knight)c).SlashDirection)
-                {
-                    case 1: panels[c.Row - 1, c.Column].Slashed(true);
-                        break;
-                    case 2: panels[c.Row, c.Column + 1].Slashed(true);
-                        break;
-                    case 3: panels[c.Row + 1, c.Column].Slashed(true);
-                        break;
-                    case 4: panels[c.Row, c.Column - 1].Slashed(true);
-                        break;
-                }
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-            {
-                if (c.Column > 0)
-                {
-                    c.move(panels[c.Row, c.Column - 1].getPosition(), c.Row, c.Column - 1);
-                }
-            } 
-            else if (Keyboard.GetState().IsKeyDown(Keys.D))
-            {
-                if (c.Column < Math.Sqrt(panels.Length) - 1)
-                {
-                    c.move(panels[c.Row, c.Column + 1].getPosition(), c.Row, c.Column + 1);
-                }
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.W))
-            {
-                if (c.Row > 0)
-                {
-                    c.move(panels[c.Row - 1, c.Column].getPosition(), c.Row - 1, c.Column);
-                }
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.S))
-            {
-                if (c.Row < Math.Sqrt(panels.Length) - 1)
-                {
-                    c.move(panels[c.Row + 1, c.Column].getPosition(), c.Row + 1, c.Column);
-                }
-            }
+            MoveCharacter();
+            Slash();
             c.Update(gameTime);
         }
 
@@ -153,6 +107,87 @@ namespace CastlesAndCannonsMonoGame
         public Character GetCharacter()
         {
             return c;
+        }
+
+        private void MoveCharacter()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                if (c.Column > 0)
+                {
+                    c.Move(panels[c.Row, c.Column - 1].GetPosition(), c.Row, c.Column - 1);
+                }
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                if (c.Column < Math.Sqrt(panels.Length) - 1)
+                {
+                    c.Move(panels[c.Row, c.Column + 1].GetPosition(), c.Row, c.Column + 1);
+                }
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.W))
+            {
+                if (c.Row > 0)
+                {
+                    c.Move(panels[c.Row - 1, c.Column].GetPosition(), c.Row - 1, c.Column);
+                }
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                if (c.Row < Math.Sqrt(panels.Length) - 1)
+                {
+                    c.Move(panels[c.Row + 1, c.Column].GetPosition(), c.Row + 1, c.Column);
+                }
+            }
+        }
+
+        private void Slash()
+        {
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                mouseClick.X = Mouse.GetState().X;
+                mouseClick.Y = Mouse.GetState().Y;
+                ((Knight) c).Slash(mouseClick);
+                if(CheckSlashDirection(((Knight)c).SlashDirection)) 
+                {
+                    switch (((Knight)c).SlashDirection)
+                    {      
+                        case 1: panels[c.Row - 1, c.Column].Slashed(true);
+                            break;
+                        case 2: panels[c.Row, c.Column + 1].Slashed(true);
+                            break;
+                        case 3: panels[c.Row + 1, c.Column].Slashed(true);
+                            break;
+                        case 4: panels[c.Row, c.Column - 1].Slashed(true);
+                            break;
+                    }
+                }
+            }
+           
+        }
+
+        private bool CheckSlashDirection(int slashDirection)
+        {
+            switch (slashDirection)
+            {
+                case 1:
+                    if (c.Row - 1 < 0)
+                        return false;
+                    break;
+                case 2:
+                    if (c.Column + 1 > GRID_SIZE - 1)
+                        return false;
+                    break;
+                case 3:
+                    if (c.Row + 1 > GRID_SIZE - 1)
+                        return false;
+                    break;
+                case 4:
+                    if (c.Column - 1 < 0)
+                        return false;
+                    break;
+            }
+            return true;
         }
     }
 }
