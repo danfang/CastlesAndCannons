@@ -26,6 +26,8 @@ namespace CastlesAndCannonsMonoGame
         private int score;
         private LinkedList<Cannonball> enemies;
         private Character c;
+        private Point mousePosition;
+        private Point mouseClick;
        
 
         public Grid()
@@ -63,18 +65,36 @@ namespace CastlesAndCannonsMonoGame
 
         public void Update(GameTime gameTime)
         {
+            mousePosition = Mouse.GetState().Position;
             c.Update(gameTime);
 
             foreach (Panel p in panels)
             {
-                p.Update(gameTime);
+                p.Update(gameTime, mousePosition);
+                p.Slashed(false);
             }
+            
 
             foreach (Cannonball cannonball in enemies)
             {
                 cannonball.Update(gameTime);
             }
 
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                ((Knight)c).Slash(Mouse.GetState().Position);
+                switch (((Knight)c).SlashDirection)
+                {
+                    case 1: panels[c.Row - 1, c.Column].Slashed(true);
+                        break;
+                    case 2: panels[c.Row, c.Column + 1].Slashed(true);
+                        break;
+                    case 3: panels[c.Row + 1, c.Column].Slashed(true);
+                        break;
+                    case 4: panels[c.Row, c.Column - 1].Slashed(true);
+                        break;
+                }
+            }
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
 

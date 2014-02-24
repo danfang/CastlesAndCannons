@@ -12,6 +12,8 @@ namespace CastlesAndCannonsMonoGame
 {
     class Panel
     {
+        private bool isSlashed;
+        private bool isSelected;
         private Rectangle bounds;
         public enum Type
         {
@@ -21,6 +23,8 @@ namespace CastlesAndCannonsMonoGame
         public Panel(int x, int y, int size)
         {
             bounds = new Rectangle(x, y, size, size);
+            isSelected = false;
+            isSlashed = false;
             Initialize();
             LoadContent();
         }
@@ -39,14 +43,23 @@ namespace CastlesAndCannonsMonoGame
             
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Point mousePosition)
         {
-            
+            if (bounds.Contains(mousePosition))
+                isSelected = true;
+            else
+                isSelected = false;
 
+            
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.Beige);
+            if (isSlashed)
+                spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.Red);
+            else if (isSelected)
+                spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.Green);
+            else
+                spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.White);
         }
 
         public Rectangle getBounds()
@@ -58,6 +71,11 @@ namespace CastlesAndCannonsMonoGame
         {
             Point p = bounds.Location;
             return new Vector2(p.X, p.Y);
+        }
+
+        public void Slashed(bool newSlash)
+        {
+            isSlashed = newSlash;
         }
     }
 }
