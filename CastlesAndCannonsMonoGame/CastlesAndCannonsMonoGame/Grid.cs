@@ -22,6 +22,7 @@ namespace CastlesAndCannonsMonoGame
         public static int PANEL_SIZE;
         public static int GRID_WIDTH_OFFSET;
         public static int GRID_HEIGHT_OFFSET;
+        public static int ENEMY_SPAWN_BUFFER;
         public static float elapsedGameTime;
         private Panel[,] panels;
         private int score;
@@ -48,6 +49,7 @@ namespace CastlesAndCannonsMonoGame
             PANEL_SIZE = (Game1.height - 100) / GRID_SIZE;
             GRID_WIDTH_OFFSET = (Game1.width - (PANEL_SIZE * GRID_SIZE)) / 2;
             GRID_HEIGHT_OFFSET = (Game1.height - (PANEL_SIZE * GRID_SIZE)) / 2;
+            ENEMY_SPAWN_BUFFER = PANEL_SIZE * 2;
             elapsedGameTime = 0;
             enemySpawnRate = .5f;
             generator = new Random();
@@ -198,29 +200,29 @@ namespace CastlesAndCannonsMonoGame
                 int seed = generator.Next((int)(1 / enemySpawnRate));
                 if (seed == 0)
                 {
-                    int direction = generator.Next(1, 5); // numbers from 1 to 4
+                    Cannonball.Direction direction = (Cannonball.Direction) generator.Next(1, 5);
+                    int index = generator.Next(GRID_SIZE);
                     Vector2 position = new Vector2();
                     switch (direction) 
                     {
-                        case 1: // going up, starts at bottom
-                            position.Y = Game1.height;
-                            position.X = generator.Next((int)GRID_WIDTH_OFFSET, (int)(GRID_WIDTH_OFFSET + GRID_SIZE * PANEL_SIZE));
+                        case Cannonball.Direction.UP: // going up, starts at bottom
+                            position = panels[GRID_SIZE - 1, index].GetPosition();
+                            position.Y += ENEMY_SPAWN_BUFFER;
                             break;
-                        case 2: // going right, starts at left
-                            position.X = 0;
-                            position.Y = generator.Next((int)GRID_HEIGHT_OFFSET, (int)(GRID_HEIGHT_OFFSET + GRID_SIZE * PANEL_SIZE));
+                        case Cannonball.Direction.RIGHT: // going right, starts at left
+                            position = panels[index, 0].GetPosition();
+                            position.X -= ENEMY_SPAWN_BUFFER;
                             break;
-                        case 3: // going down, starts at top
-                            position.Y = 0;
-                            position.X = generator.Next((int)GRID_WIDTH_OFFSET, (int)(GRID_WIDTH_OFFSET + GRID_SIZE * PANEL_SIZE));
+                        case Cannonball.Direction.DOWN: // going down, starts at top
+                            position = panels[0, index].GetPosition();
+                            position.Y -= ENEMY_SPAWN_BUFFER;
                             break;
-                        case 4: // going left, starts at right
-                            position.X = Game1.width;
-                            position.Y = generator.Next((int)GRID_HEIGHT_OFFSET, (int)(GRID_HEIGHT_OFFSET + GRID_SIZE * PANEL_SIZE));
+                        case Cannonball.Direction.LEFT: // going left, starts at right
+                            position = panels[index, GRID_SIZE - 1].GetPosition();
+                            position.X += ENEMY_SPAWN_BUFFER;
                             break;
                     }
                     enemies.AddLast(new Cannonball(direction, position));
-
                     System.Diagnostics.Debug.WriteLine(enemies.Count);
                 }
                 enemySpawnTimer = 1;
