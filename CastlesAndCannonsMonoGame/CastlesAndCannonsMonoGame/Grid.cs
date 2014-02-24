@@ -69,7 +69,8 @@ namespace CastlesAndCannonsMonoGame
 
         public void Update(GameTime gameTime)
         {
-            mousePosition = Mouse.GetState().Position;
+            mousePosition.X = Mouse.GetState().X;
+            mousePosition.Y = Mouse.GetState().Y;
             c.Update(gameTime);
             elapsedGameTime += (float) gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -89,7 +90,9 @@ namespace CastlesAndCannonsMonoGame
 
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                ((Knight)c).Slash(Mouse.GetState().Position);
+                mouseClick.X = Mouse.GetState().X;
+                mouseClick.Y = Mouse.GetState().Y;
+                ((Knight)c).Slash(mouseClick);
                 switch (((Knight)c).SlashDirection)
                 {
                     case 1: panels[c.Row - 1, c.Column].Slashed(true);

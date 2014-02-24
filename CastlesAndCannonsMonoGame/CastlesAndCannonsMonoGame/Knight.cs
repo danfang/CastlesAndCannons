@@ -16,7 +16,7 @@ namespace CastlesAndCannonsMonoGame
         private int slashDirection; // 0 = no slash, 1 is top (goes clockwise)
         private float mouseAngle; // 1 is top (clockwise)
         private Func<float, float, float> getAngle;
-        public Knight(Vector2 pos, int newSize)
+
         public Knight(Vector2 pos, int newSize, int row, int col)
         {
             getAngle = (x, y) => (float) Math.Atan2(y, x);
