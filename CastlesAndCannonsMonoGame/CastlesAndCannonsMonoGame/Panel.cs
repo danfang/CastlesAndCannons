@@ -18,7 +18,7 @@ namespace CastlesAndCannonsMonoGame
 
         }
 
-        public Panel(int x, int y, int size)
+        public Panel(int y, int x, int size)
         {
             bounds = new Rectangle(x, y, size, size);
             Initialize();

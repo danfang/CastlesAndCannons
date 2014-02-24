@@ -12,7 +12,7 @@ namespace CastlesAndCannonsMonoGame
 {
     class Knight : Character
     {
-        public Knight(Vector2 pos, int newSize)
+        public Knight(Vector2 pos, int newSize, int row, int col)
         {
             health = 100;
             mana = 100;
@@ -20,7 +20,9 @@ namespace CastlesAndCannonsMonoGame
             speed = 2.5f;
             position = pos;
             size = newSize;
-            bounds = new Rectangle((int)position.X, (int)position.Y, size, size);
+            this.row = row;
+            this.column = col;
+            bounds = new Rectangle((int) position.X, (int) position.Y, size, size);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
