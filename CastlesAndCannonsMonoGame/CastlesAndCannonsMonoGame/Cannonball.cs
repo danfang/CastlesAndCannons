@@ -23,7 +23,7 @@ namespace CastlesAndCannonsMonoGame
             UP = 1,
             LEFT = 2,
             RIGHT = 3,
-            DOWN = 4;
+            DOWN = 4
         }
 
         public static float speed = 10;
