@@ -29,6 +29,9 @@ namespace CastlesAndCannonsMonoGame
         private Character c;
         private Point mousePosition;
         private Point mouseClick;
+        private float enemySpawnRate; // enemies per second
+        private float enemySpawnTimer;
+        private Random generator;
        
 
         public Grid()
@@ -46,7 +49,8 @@ namespace CastlesAndCannonsMonoGame
             GRID_WIDTH_OFFSET = (Game1.width - (PANEL_SIZE * GRID_SIZE)) / 2;
             GRID_HEIGHT_OFFSET = (Game1.height - (PANEL_SIZE * GRID_SIZE)) / 2;
             elapsedGameTime = 0;
-            enemies.AddFirst(new Cannonball()); // testing cannonball
+            enemySpawnRate = .5f;
+            generator = new Random();
         }
 
         
@@ -80,6 +84,7 @@ namespace CastlesAndCannonsMonoGame
                 p.Slashed(false);
             }
 
+            SpawnEnemies(gameTime);
             foreach (Cannonball cannonball in enemies)
             {
                 cannonball.Update(gameTime);
@@ -93,9 +98,9 @@ namespace CastlesAndCannonsMonoGame
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
             {
             foreach (Panel p in panels)
-                {
+            {
                 p.Draw(gameTime, spriteBatch);
-                }
+            }
 
             foreach (Cannonball cannonball in enemies)
             {
@@ -116,30 +121,22 @@ namespace CastlesAndCannonsMonoGame
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 if (c.Column > 0)
-                {
                     tempCol--;
-                }
             } 
             else if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 if (c.Column < Math.Sqrt(panels.Length) - 1)
-                {
                     tempCol++;
-                }
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 if (c.Row > 0)
-                {
                     tempRow--;
-                }
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
                 if (c.Row < Math.Sqrt(panels.Length) - 1)
-                {
                     tempRow++;
-                }
             }
             c.Move(panels[tempRow, tempCol].GetPosition(), tempRow, tempCol);
         }
@@ -150,11 +147,11 @@ namespace CastlesAndCannonsMonoGame
             {
                 mouseClick.X = Mouse.GetState().X;
                 mouseClick.Y = Mouse.GetState().Y;
-                ((Knight) c).Slash(mouseClick);
-                if(CheckSlashDirection(((Knight)c).SlashDirection)) 
-        {
+                ((Knight)c).Slash(mouseClick);
+                if (CheckSlashDirection(((Knight)c).SlashDirection) && !c.IsMoving)
+                {
                     switch (((Knight)c).SlashDirection)
-            {
+                    {
                         case 1: panels[c.Row - 1, c.Column].Slashed(true);
                             break;
                         case 2: panels[c.Row, c.Column + 1].Slashed(true);
@@ -191,6 +188,44 @@ namespace CastlesAndCannonsMonoGame
                     break;
             }
             return true;
+        }
+
+        private void SpawnEnemies(GameTime gameTime)
+        {
+            enemySpawnTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (enemySpawnTimer < 0)
+            {
+                int seed = generator.Next((int)(1 / enemySpawnRate));
+                if (seed == 0)
+                {
+                    int direction = generator.Next(1, 5); // numbers from 1 to 4
+                    Vector2 position = new Vector2();
+                    switch (direction) 
+                    {
+                        case 1: // going up, starts at bottom
+                            position.Y = Game1.height;
+                            position.X = generator.Next((int)GRID_WIDTH_OFFSET, (int)(GRID_WIDTH_OFFSET + GRID_SIZE * PANEL_SIZE));
+                            break;
+                        case 2: // going right, starts at left
+                            position.X = 0;
+                            position.Y = generator.Next((int)GRID_HEIGHT_OFFSET, (int)(GRID_HEIGHT_OFFSET + GRID_SIZE * PANEL_SIZE));
+                            break;
+                        case 3: // going down, starts at top
+                            position.Y = 0;
+                            position.X = generator.Next((int)GRID_WIDTH_OFFSET, (int)(GRID_WIDTH_OFFSET + GRID_SIZE * PANEL_SIZE));
+                            break;
+                        case 4: // going left, starts at right
+                            position.X = Game1.width;
+                            position.Y = generator.Next((int)GRID_HEIGHT_OFFSET, (int)(GRID_HEIGHT_OFFSET + GRID_SIZE * PANEL_SIZE));
+                            break;
+                    }
+                    enemies.AddLast(new Cannonball(direction, position));
+
+                    System.Diagnostics.Debug.WriteLine(enemies.Count);
+                }
+                enemySpawnTimer = 1;
+            }
+
         }
     }
 }

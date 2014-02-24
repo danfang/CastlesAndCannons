@@ -18,36 +18,36 @@ namespace CastlesAndCannonsMonoGame
 
         }
 
-        public static float speed = 60;
+        public static float speed = 10;
         private int armor;
         private int health;
+        private Vector2 velocity;
         private bool isAlive;
         private Vector2 pos;
         private Rectangle bounds; // make circle at some point
         
-        public Cannonball()
-        {
-            Initialize();
-            LoadContent();
-        }
-
-        private void Initialize() 
+        public Cannonball(int direction, Vector2 position)
         {
             armor = 30;
             health = 100;
             isAlive = true;
-            pos = new Vector2(Grid.GRID_WIDTH_OFFSET - Grid.PANEL_SIZE * 2, Grid.GRID_HEIGHT_OFFSET);
-            bounds = new Rectangle(Grid.GRID_WIDTH_OFFSET - Grid.PANEL_SIZE * 2, Grid.GRID_HEIGHT_OFFSET, Grid.PANEL_SIZE, Grid.PANEL_SIZE);
-        }
-
-        private void LoadContent()
-        {
-
-        }
-
-        public void UnloadContent()
-        {
-            
+            pos = position;
+            bounds = new Rectangle((int)position.X, (int)position.Y, Grid.PANEL_SIZE, Grid.PANEL_SIZE);
+            switch (direction)
+            {
+                case 1: // up
+                    velocity = new Vector2(0, -1 * speed);
+                    break;
+                case 2: // right
+                    velocity = new Vector2(speed, 0);
+                    break;
+                case 3: // down
+                    velocity = new Vector2(0, speed);
+                    break;
+                case 4: // left
+                    velocity = new Vector2(-1 * speed, 0);
+                    break;
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -55,8 +55,10 @@ namespace CastlesAndCannonsMonoGame
             int seconds = (int) Grid.elapsedGameTime;
             if (seconds != 0)
             {
-                pos.X += Grid.PANEL_SIZE * Grid.GRID_SIZE / speed; 
+                pos.X += velocity.X;
+                pos.Y += velocity.Y; 
                 bounds.X = (int) pos.X;
+                bounds.Y = (int) pos.Y;
             }
 
         }

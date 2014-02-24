@@ -23,7 +23,7 @@ namespace CastlesAndCannonsMonoGame
             health = 100;
             mana = 100;
             armor = 2;
-            speed = 5f; // The unit for speed is pixels per update.
+            speed = 10f; // The unit for speed is pixels per update.
             position = pos;
             size = newSize;
             this.row = row;
