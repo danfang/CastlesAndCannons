@@ -17,10 +17,12 @@ namespace CastlesAndCannonsMonoGame
         protected int armor;
         protected float speed;
         protected Vector2 position;
+        protected Vector2 desiredPos;
         protected int row;
         protected int column;
         protected Rectangle bounds;
         protected int size;
+        protected bool isMoving;
 
         public void UnloadContent()
         {
@@ -32,20 +34,66 @@ namespace CastlesAndCannonsMonoGame
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            
+
+        }
+        public void Move(Vector2 newPos, int newRow, int newCol)
+        {
+            if (isMoving)
+            {
+                if (position.X - desiredPos.X > speed)
+                {
+                    position.X -= speed;
+                    bounds.X = (int)position.X;
+                }
+                else if (position.X - desiredPos.X < -speed)
+                {
+                    position.X += speed;
+                    bounds.X = (int)position.X;
+                }
+                else if (position.Y - desiredPos.Y > speed)
+                {
+                    position.Y -= speed;
+                    bounds.Y = (int)position.Y;
+                }
+                else if (position.Y - desiredPos.Y < -speed)
+                {
+                    position.Y += speed;
+                    bounds.Y = (int)position.Y;
+                }
+                else
+                {
+                    isMoving = false;
+                    position = desiredPos;
+                    bounds.X = (int)position.X;
+                    bounds.Y = (int)position.Y;
+                }
+            }
+            else
+            {
+                if (!newPos.Equals(position))
+                {
+                    row = newRow;
+                    column = newCol;
+                    desiredPos = newPos;
+                    isMoving = true;
+                }
+            }
         }
 
         /*******************
          * GET/SET METHODS *
-         *******************/
+         *******************/     
 
-        public void move(Vector2 newPos, int row, int col)
+        public bool IsMoving
         {
-            position = newPos;
-            bounds.X = (int)newPos.X;
-            bounds.Y = (int)newPos.Y;
-            this.row = row;
-            this.column = col;
+            get
+            {
+                return isMoving;
+            }
+            set
+            {
+                isMoving = value;
+            }
         }
 
         public int Health

@@ -59,7 +59,7 @@ namespace CastlesAndCannonsMonoGame
                     panels[row, col] = new Panel(GRID_HEIGHT_OFFSET + row * PANEL_SIZE, GRID_WIDTH_OFFSET + col * PANEL_SIZE, PANEL_SIZE);
                 }
             }
-           c = new Knight(panels[2, 2].getPosition(), PANEL_SIZE, 2, 2);
+           c = new Knight(panels[2, 2].GetPosition(), PANEL_SIZE, 2, 2);
         }
 
         public void UnloadContent()
@@ -105,34 +105,37 @@ namespace CastlesAndCannonsMonoGame
                         break;
                 }
             }
+            int tempRow = c.Row;
+            int tempCol = c.Column;
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 if (c.Column > 0)
                 {
-                    c.move(panels[c.Row, c.Column - 1].getPosition(), c.Row, c.Column - 1);
+                    tempCol--;
                 }
             } 
             else if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 if (c.Column < Math.Sqrt(panels.Length) - 1)
                 {
-                    c.move(panels[c.Row, c.Column + 1].getPosition(), c.Row, c.Column + 1);
+                    tempCol++;
                 }
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 if (c.Row > 0)
                 {
-                    c.move(panels[c.Row - 1, c.Column].getPosition(), c.Row - 1, c.Column);
+                    tempRow--;
                 }
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
                 if (c.Row < Math.Sqrt(panels.Length) - 1)
                 {
-                    c.move(panels[c.Row + 1, c.Column].getPosition(), c.Row + 1, c.Column);
+                    tempRow++;
                 }
             }
+            c.Move(panels[tempRow, tempCol].GetPosition(), tempRow, tempCol);
             c.Update(gameTime);
         }
 

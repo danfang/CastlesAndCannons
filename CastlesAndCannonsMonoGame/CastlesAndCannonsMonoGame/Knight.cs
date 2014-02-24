@@ -23,12 +23,13 @@ namespace CastlesAndCannonsMonoGame
             health = 100;
             mana = 100;
             armor = 2;
-            speed = 2.5f;
+            speed = 5f; // The unit for speed is pixels per update.
             position = pos;
             size = newSize;
             this.row = row;
             this.column = col;
             bounds = new Rectangle((int) position.X, (int) position.Y, size, size);
+            isMoving = false;
         }
 
         public void Update(GameTime gameTime)
