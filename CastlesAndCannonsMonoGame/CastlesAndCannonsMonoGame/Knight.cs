@@ -28,5 +28,6 @@ namespace CastlesAndCannonsMonoGame
             spriteBatch.Draw(Textures.knightTexture, bounds, Color.White);
         }
 
+
     }
 }

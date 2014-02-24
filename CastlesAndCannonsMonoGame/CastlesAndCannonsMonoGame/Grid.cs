@@ -22,6 +22,7 @@ namespace CastlesAndCannonsMonoGame
         public static int PANEL_SIZE;
         public static int GRID_WIDTH_OFFSET;
         public static int GRID_HEIGHT_OFFSET;
+        public static float elapsedGameTime;
         private Panel[,] panels;
         private int score;
         private LinkedList<Cannonball> enemies;
@@ -42,8 +43,11 @@ namespace CastlesAndCannonsMonoGame
             PANEL_SIZE = (Game1.height - 100) / GRID_SIZE;
             GRID_WIDTH_OFFSET = (Game1.width - (PANEL_SIZE * GRID_SIZE)) / 2;
             GRID_HEIGHT_OFFSET = (Game1.height - (PANEL_SIZE * GRID_SIZE)) / 2;
+            elapsedGameTime = 0;
+            enemies.AddFirst(new Cannonball()); // testing cannonball
         }
 
+        
         private void LoadContent()
         {
             for(int row = 0; row < GRID_SIZE; row++)
@@ -63,7 +67,9 @@ namespace CastlesAndCannonsMonoGame
 
         public void Update(GameTime gameTime)
         {
-            c.Update(gameTime);
+            elapsedGameTime += (float) gameTime.ElapsedGameTime.TotalSeconds;
+
+            ((Knight) c).Update(gameTime);
 
             foreach (Panel p in panels)
             {
@@ -75,10 +81,6 @@ namespace CastlesAndCannonsMonoGame
                 cannonball.Update(gameTime);
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-            {
-
-            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

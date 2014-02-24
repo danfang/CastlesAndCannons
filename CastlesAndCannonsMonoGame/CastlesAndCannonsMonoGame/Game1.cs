@@ -79,6 +79,7 @@ namespace CastlesAndCannonsMonoGame
         {
             // TODO: Add your update logic here
             base.Update(gameTime);
+            g.Update(gameTime);
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                 App.Current.Exit();
         }
