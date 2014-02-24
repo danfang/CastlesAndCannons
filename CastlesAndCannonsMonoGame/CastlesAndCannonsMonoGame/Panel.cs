@@ -62,12 +62,12 @@ namespace CastlesAndCannonsMonoGame
                 spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.White);
         }
 
-        public Rectangle getBounds()
+        public Rectangle GetBounds()
         {
             return bounds;
         }
 
-        public Vector2 getPosition()
+        public Vector2 GetPosition()
         {
             Point p = bounds.Location;
             return new Vector2(p.X, p.Y);
