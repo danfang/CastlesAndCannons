@@ -12,11 +12,12 @@ using FarseerPhysics;
 namespace CastlesAndCannonsMonoGame
 {
     class Knight : Character
-    { 
+    {
         private int slashDirection; // 0 = no slash, 1 is top (goes clockwise)
         private float mouseAngle; // 1 is top (clockwise)
         private Func<float, float, float> getAngle;
         public Knight(Vector2 pos, int newSize)
+        public Knight(Vector2 pos, int newSize, int row, int col)
         {
             getAngle = (x, y) => (float) Math.Atan2(y, x);
             health = 100;
@@ -25,7 +26,9 @@ namespace CastlesAndCannonsMonoGame
             speed = 2.5f;
             position = pos;
             size = newSize;
-            bounds = new Rectangle((int)position.X, (int)position.Y, size, size);
+            this.row = row;
+            this.column = col;
+            bounds = new Rectangle((int) position.X, (int) position.Y, size, size);
         }
 
         public void Update(GameTime gameTime)

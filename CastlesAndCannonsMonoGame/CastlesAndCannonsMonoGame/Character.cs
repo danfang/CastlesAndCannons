@@ -39,10 +39,15 @@ namespace CastlesAndCannonsMonoGame
          * GET/SET METHODS *
          *******************/
 
-        public void move(Vector2 newPos)
+        public void move(Vector2 newPos, int row, int col)
         {
             position = newPos;
+            bounds.X = (int)newPos.X;
+            bounds.Y = (int)newPos.Y;
+            this.row = row;
+            this.column = col;
         }
+
         public int Health
         {
             get

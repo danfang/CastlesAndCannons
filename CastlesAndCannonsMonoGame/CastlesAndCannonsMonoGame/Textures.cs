@@ -13,12 +13,13 @@ namespace CastlesAndCannonsMonoGame
     {
         public static Texture2D normalPanelTexture;
         public static Texture2D knightTexture;
+        public static Texture2D cannonTexture;
 
         public static void LoadContent(Game game)
         {
             normalPanelTexture = game.Content.Load<Texture2D>("Tile");
             knightTexture = game.Content.Load<Texture2D>("KnightSpriteTemp");
-
+            cannonTexture = game.Content.Load<Texture2D>("CannonBall");
         }
     }
 }
