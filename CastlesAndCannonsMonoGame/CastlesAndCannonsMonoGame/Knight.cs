@@ -15,11 +15,11 @@ namespace CastlesAndCannonsMonoGame
     {
         private int slashDirection; // 0 = no slash, 1 is top (goes clockwise)
         private float mouseAngle; // 1 is top (clockwise)
-        private Func<float, float, float> getAngle;
+        private Func<float, float, float> GetAngle;
 
         public Knight(Vector2 pos, int newSize, int row, int col)
         {
-            getAngle = (x, y) => (float) Math.Atan2(y, x);
+            GetAngle = (x, y) => (float) Math.Atan2(y, x);
             health = 100;
             mana = 100;
             armor = 2;
@@ -39,7 +39,7 @@ namespace CastlesAndCannonsMonoGame
 
         public void Slash(Point mouseClick)
         {
-            mouseAngle = getAngle(mouseClick.X - position.X, position.Y - mouseClick.Y) * 180 / (float) Math.PI;
+            mouseAngle = GetAngle(mouseClick.X - position.X, position.Y - mouseClick.Y) * 180 / (float) Math.PI;
             if (mouseAngle > 45 && mouseAngle < 135)
                 slashDirection = 1;
             else if (mouseAngle < 45 && mouseAngle > -45)

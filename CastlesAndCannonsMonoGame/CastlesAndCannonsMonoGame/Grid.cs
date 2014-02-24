@@ -71,10 +71,8 @@ namespace CastlesAndCannonsMonoGame
         {
             mousePosition.X = Mouse.GetState().X;
             mousePosition.Y = Mouse.GetState().Y;
-            c.Update(gameTime);
-            elapsedGameTime += (float) gameTime.ElapsedGameTime.TotalSeconds;
 
-            ((Knight) c).Update(gameTime);
+            elapsedGameTime += (float) gameTime.ElapsedGameTime.TotalSeconds;
 
             foreach (Panel p in panels)
             {
@@ -82,29 +80,37 @@ namespace CastlesAndCannonsMonoGame
                 p.Slashed(false);
             }
 
-
             foreach (Cannonball cannonball in enemies)
             {
                 cannonball.Update(gameTime);
             }
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            MoveCharacter();
+            Slash();
+            c.Update(gameTime);
+        }
+
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
             {
-                mouseClick.X = Mouse.GetState().X;
-                mouseClick.Y = Mouse.GetState().Y;
-                ((Knight)c).Slash(mouseClick);
-                switch (((Knight)c).SlashDirection)
+            foreach (Panel p in panels)
                 {
-                    case 1: panels[c.Row - 1, c.Column].Slashed(true);
-                        break;
-                    case 2: panels[c.Row, c.Column + 1].Slashed(true);
-                        break;
-                    case 3: panels[c.Row + 1, c.Column].Slashed(true);
-                        break;
-                    case 4: panels[c.Row, c.Column - 1].Slashed(true);
-                        break;
+                p.Draw(gameTime, spriteBatch);
                 }
+
+            foreach (Cannonball cannonball in enemies)
+            {
+                cannonball.Draw(gameTime, spriteBatch);
             }
+            ((Knight)c).Draw(gameTime, spriteBatch);
+        }
+
+        public Character GetCharacter()
+        {
+            return c;
+        }
+
+        private void MoveCharacter()
+        {
             int tempRow = c.Row;
             int tempCol = c.Column;
             if (Keyboard.GetState().IsKeyDown(Keys.A))
@@ -136,26 +142,55 @@ namespace CastlesAndCannonsMonoGame
                 }
             }
             c.Move(panels[tempRow, tempCol].GetPosition(), tempRow, tempCol);
-            c.Update(gameTime);
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        private void Slash()
         {
-            foreach (Panel p in panels)
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                p.Draw(gameTime, spriteBatch);
+                mouseClick.X = Mouse.GetState().X;
+                mouseClick.Y = Mouse.GetState().Y;
+                ((Knight) c).Slash(mouseClick);
+                if(CheckSlashDirection(((Knight)c).SlashDirection)) 
+        {
+                    switch (((Knight)c).SlashDirection)
+            {
+                        case 1: panels[c.Row - 1, c.Column].Slashed(true);
+                            break;
+                        case 2: panels[c.Row, c.Column + 1].Slashed(true);
+                            break;
+                        case 3: panels[c.Row + 1, c.Column].Slashed(true);
+                            break;
+                        case 4: panels[c.Row, c.Column - 1].Slashed(true);
+                            break;
+                    }
+                }
             }
 
-            foreach (Cannonball cannonball in enemies)
-            {
-                cannonball.Draw(gameTime, spriteBatch);
-            }
-            ((Knight)c).Draw(gameTime, spriteBatch);
         }
 
-        public Character GetCharacter()
+        private bool CheckSlashDirection(int slashDirection)
         {
-            return c;
+            switch (slashDirection)
+        {
+                case 1:
+                    if (c.Row - 1 < 0)
+                        return false;
+                    break;
+                case 2:
+                    if (c.Column + 1 > GRID_SIZE - 1)
+                        return false;
+                    break;
+                case 3:
+                    if (c.Row + 1 > GRID_SIZE - 1)
+                        return false;
+                    break;
+                case 4:
+                    if (c.Column - 1 < 0)
+                        return false;
+                    break;
+            }
+            return true;
         }
     }
 }

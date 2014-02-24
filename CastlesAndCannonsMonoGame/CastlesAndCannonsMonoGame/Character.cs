@@ -34,7 +34,7 @@ namespace CastlesAndCannonsMonoGame
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-
+            
         }
         public void Move(Vector2 newPos, int newRow, int newCol)
         {
@@ -82,7 +82,7 @@ namespace CastlesAndCannonsMonoGame
 
         /*******************
          * GET/SET METHODS *
-         *******************/     
+         *******************/
 
         public bool IsMoving
         {
