@@ -75,5 +75,10 @@ namespace CastlesAndCannonsMonoGame
         {   
             spriteBatch.Draw(Textures.cannonTexture, bounds, Color.White);
         }
+
+        public Rectangle Bounds()
+        {
+            return bounds;
+        }
     }
 }

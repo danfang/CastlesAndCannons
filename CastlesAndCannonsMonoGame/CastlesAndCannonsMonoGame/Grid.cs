@@ -87,9 +87,18 @@ namespace CastlesAndCannonsMonoGame
             }
 
             SpawnEnemies(gameTime);
+            Queue<Cannonball> toDestroy = new Queue<Cannonball>();
             foreach (Cannonball cannonball in enemies)
             {
                 cannonball.Update(gameTime);
+                if (cannonball.Bounds().Intersects(c.Bounds()))
+                {
+                    toDestroy.Enqueue(cannonball);
+                }
+            }
+            if (toDestroy.Count != 0)
+            {
+                enemies.Remove(toDestroy.Dequeue());
             }
 
             MoveCharacter();
@@ -150,6 +159,7 @@ namespace CastlesAndCannonsMonoGame
                 mouseClick.X = Mouse.GetState().X;
                 mouseClick.Y = Mouse.GetState().Y;
                 ((Knight)c).Slash(mouseClick);
+
                 if (CheckSlashDirection(((Knight)c).SlashDirection) && !c.IsMoving)
                 {
                     switch (((Knight)c).SlashDirection)

@@ -182,6 +182,11 @@ namespace CastlesAndCannonsMonoGame
             position.Y = y;
         }
 
+        public Rectangle Bounds()
+        {
+            return bounds;
+        }
+
 
     }
 }
