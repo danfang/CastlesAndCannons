@@ -40,9 +40,10 @@ namespace CastlesAndCannonsMonoGame
 
         public void Update(GameTime gameTime)
         {
-
+            
         }
 
+        
         public void Slash(Point mouseClick)
         {
             mouseAngle = GetAngle(mouseClick.X - position.X, position.Y - mouseClick.Y) * 180 / (float) Math.PI;

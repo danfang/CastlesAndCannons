@@ -13,11 +13,13 @@ namespace CastlesAndCannonsMonoGame
 {
     class Cannonball
     {
+        // Used to identify which type of Cannonball is shot.
         public enum State
         {
 
         }
 
+        // Used to identify which direction the Cannonball is going in.
         public enum Direction
         {
             UP = 1,
@@ -27,6 +29,7 @@ namespace CastlesAndCannonsMonoGame
         }
 
         public static float speed = 10;
+        private int damage;
         private int armor;
         private int health;
         private Vector2 velocity;
@@ -34,8 +37,12 @@ namespace CastlesAndCannonsMonoGame
         private Vector2 pos;
         private Rectangle bounds; // make circle at some point
         
+        // Constructs a new Cannonball. Direction d represents the direction
+        // the Cannonball is going to be going and the Vector2, position, represents
+        // the initial position the Cannonball is going to be in.
         public Cannonball(Direction d, Vector2 position)
         {
+            damage = 20; // regular cannonball damage
             armor = 30;
             health = 100;
             isAlive = true;
@@ -58,6 +65,7 @@ namespace CastlesAndCannonsMonoGame
             }
         }
 
+        // Updates the Cannonball movement as it is firing.
         public void Update(GameTime gameTime)
         {
             int seconds = (int) Grid.elapsedGameTime;
@@ -70,15 +78,26 @@ namespace CastlesAndCannonsMonoGame
             }
 
         }
-
+        
+        // Draws the updated Cannonball.
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {   
             spriteBatch.Draw(Textures.cannonTexture, bounds, Color.White);
         }
 
+        // Returns the Rectangle representing the bounds of the Cannonball.
         public Rectangle Bounds()
         {
             return bounds;
+        }
+
+        // Returns the amount of damage the Cannonball deals.
+        public int Damage
+        {
+            get
+            {
+                return damage;
+            }
         }
     }
 }

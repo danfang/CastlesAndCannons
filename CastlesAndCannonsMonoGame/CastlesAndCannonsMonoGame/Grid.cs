@@ -18,29 +18,33 @@ namespace CastlesAndCannonsMonoGame
 
         }
 
-        public static int GRID_SIZE = 8;
+        public const int GRID_SIZE = 8;
         public static int PANEL_SIZE;
         public static int GRID_WIDTH_OFFSET;
         public static int GRID_HEIGHT_OFFSET;
         public static int ENEMY_SPAWN_BUFFER;
         public static float elapsedGameTime;
         private Panel[,] panels;
-        private int score;
+        private int score; // to be implemented
         private LinkedList<Cannonball> enemies;
         private Character c;
         private Point mousePosition;
         private Point mouseClick;
         private float enemySpawnRate; // enemies per second
-        private float enemySpawnTimer;
-        private Random generator;
+        private float enemySpawnTimer; // 
+        private Random generator; // used to randomly generate enemies
+        private Rectangle curHealthBar; // current health
+        private Rectangle backgroundHealthBar; // background health
        
-
+        // Creates a new instance of Grid. Puts the Character in the Grid at row 2
+        // column 2.
         public Grid()
         {
             Initialize();
             LoadContent();
         }
 
+        // Defines the constants of the Grid.
         private void Initialize()
         {
             panels = new Panel[GRID_SIZE, GRID_SIZE];
@@ -55,7 +59,7 @@ namespace CastlesAndCannonsMonoGame
             generator = new Random();
         }
 
-        
+        // Creates the actual Grid and puts the Character in the Grid.
         private void LoadContent()
         {
             for(int row = 0; row < GRID_SIZE; row++)
@@ -73,20 +77,32 @@ namespace CastlesAndCannonsMonoGame
             
         }
 
+        // Updates the Grid class. In effect, it spawns new enemies, updates the cannonballs,
+        // moves the character if there is movement.
         public void Update(GameTime gameTime)
         {
+            backgroundHealthBar = new Rectangle(50, 20, 100, 20);
             mousePosition.X = Mouse.GetState().X;
             mousePosition.Y = Mouse.GetState().Y;
 
             elapsedGameTime += (float) gameTime.ElapsedGameTime.TotalSeconds;
-
             foreach (Panel p in panels)
             {
                 p.Update(gameTime, mousePosition);
                 p.Slashed(false);
             }
-
             SpawnEnemies(gameTime);
+            UpdateCannonballs(gameTime);
+            Slash();
+            c.Update(gameTime, panels);
+        }
+
+        // Updates all of the cannonballs and if a collision occurs, removes
+        // the CannonBall all together and interacts with the enemy player
+        // depending on what CannonBall it is.
+        // The GameTime parameter represents the current state of the game.
+        private void UpdateCannonballs(GameTime gameTime)
+        {
             Queue<Cannonball> toDestroy = new Queue<Cannonball>();
             foreach (Cannonball cannonball in enemies)
             {
@@ -96,16 +112,27 @@ namespace CastlesAndCannonsMonoGame
                     toDestroy.Enqueue(cannonball);
                 }
             }
-            if (toDestroy.Count != 0)
+            while (toDestroy.Count != 0)
             {
-                enemies.Remove(toDestroy.Dequeue());
+                Cannonball collide = toDestroy.Dequeue();
+                enemies.Remove(collide);
+                c.Health -= collide.Damage;
+                System.Diagnostics.Debug.WriteLine(c.Health);
+                if (c.Health == 0) // Character is dead
+                { 
+                    System.Diagnostics.Debug.WriteLine("the character is dead");
+                }
             }
-
-            MoveCharacter();
-            Slash();
-            c.Update(gameTime);
+            UpdateHealthBar();
         }
 
+        // Updates the health bar with the new character health if it changed.
+        private void UpdateHealthBar()
+        {
+            curHealthBar = new Rectangle(50, 20, c.Health, 20);
+        }
+
+        // Draws the Grid, Cannonballs, and Knight
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
             {
             foreach (Panel p in panels)
@@ -118,40 +145,17 @@ namespace CastlesAndCannonsMonoGame
                 cannonball.Draw(gameTime, spriteBatch);
             }
             ((Knight)c).Draw(gameTime, spriteBatch);
+            spriteBatch.Draw(Textures.backgroundTexture, backgroundHealthBar, Color.White);
+            spriteBatch.Draw(Textures.healthTexture, curHealthBar, Color.Red);
         }
 
+        // Returns the Character playing.
         public Character GetCharacter()
         {
             return c;
         }
 
-        private void MoveCharacter()
-        {
-            int tempRow = c.Row;
-            int tempCol = c.Column;
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-            {
-                if (c.Column > 0)
-                    tempCol--;
-            } 
-            else if (Keyboard.GetState().IsKeyDown(Keys.D))
-            {
-                if (c.Column < Math.Sqrt(panels.Length) - 1)
-                    tempCol++;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.W))
-            {
-                if (c.Row > 0)
-                    tempRow--;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.S))
-            {
-                if (c.Row < Math.Sqrt(panels.Length) - 1)
-                    tempRow++;
-            }
-            c.Move(panels[tempRow, tempCol].GetPosition(), tempRow, tempCol);
-        }
-
+        // TODO: Possible moving to Knight and implement in Knight Update?
         private void Slash()
         {
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
@@ -178,6 +182,7 @@ namespace CastlesAndCannonsMonoGame
 
         }
 
+        // TODO: Document
         private bool CheckSlashDirection(int slashDirection)
         {
             switch (slashDirection)
@@ -201,7 +206,8 @@ namespace CastlesAndCannonsMonoGame
             }
             return true;
         }
-
+        
+        // TODO: Document
         private void SpawnEnemies(GameTime gameTime)
         {
             enemySpawnTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;

@@ -159,6 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\CannonBall.png" />
+    <Content Include="Assets\Health.png" />
+    <Content Include="Assets\HealthBackground.png" />
+    <Content Include="Assets\KnightSprite.png" />
     <Content Include="Assets\KnightSpriteTemp.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SmallLogo.png" />
