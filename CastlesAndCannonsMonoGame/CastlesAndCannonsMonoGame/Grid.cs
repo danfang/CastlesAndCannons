@@ -35,6 +35,7 @@ namespace CastlesAndCannonsMonoGame
         private Random generator; // used to randomly generate enemies
         private Rectangle curHealthBar; // current health
         private Rectangle backgroundHealthBar; // background health
+
        
         // Creates a new instance of Grid. Puts the Character in the Grid at row 2
         // column 2.
@@ -44,7 +45,7 @@ namespace CastlesAndCannonsMonoGame
             LoadContent();
         }
 
-        // Defines the constants of the Grid.
+        // Defines the constants and objects of Grid.
         private void Initialize()
         {
             panels = new Panel[GRID_SIZE, GRID_SIZE];
@@ -117,6 +118,7 @@ namespace CastlesAndCannonsMonoGame
                 Cannonball collide = toDestroy.Dequeue();
                 enemies.Remove(collide);
                 c.Health -= collide.Damage;
+                Game1.scoreDisplay.Score += 100; // testing score
                 System.Diagnostics.Debug.WriteLine(c.Health);
                 if (c.Health == 0) // Character is dead
                 { 

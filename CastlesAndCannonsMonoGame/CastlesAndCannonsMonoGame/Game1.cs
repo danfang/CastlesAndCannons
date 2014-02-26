@@ -19,9 +19,9 @@ namespace CastlesAndCannonsMonoGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
         private Player p;
         private Grid g;
+        public static HUD scoreDisplay;
         public static int height;
         public static int width;
 
@@ -57,7 +57,10 @@ namespace CastlesAndCannonsMonoGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            scoreDisplay = new HUD();
+            scoreDisplay.font = Content.Load<SpriteFont>("SpriteFont2");
+            // When loading fonts, go to CastlesAndCannonsMonoGame -> bin -> Windows8 -> Debug
+            // AppX -> Assets and paste the Font in there
             // TODO: use this.Content to load your game content here
         }
 
@@ -95,6 +98,7 @@ namespace CastlesAndCannonsMonoGame
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             g.Draw(gameTime, spriteBatch);
+            scoreDisplay.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
 

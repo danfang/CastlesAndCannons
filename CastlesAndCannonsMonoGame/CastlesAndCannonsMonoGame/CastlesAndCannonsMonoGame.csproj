@@ -143,6 +143,7 @@
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Game1.cs" />
+    <Compile Include="HUD.cs" />
     <Compile Include="Knight.cs" />
     <Compile Include="Panel.cs" />
     <Compile Include="Player.cs" />
@@ -155,7 +156,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Assets\SpriteFont2.xnb" />
     <None Include="CastlesAndCannonsMonoGame_TemporaryKey.pfx" />
+    <Content Include="Common\Font.TTF" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\CannonBall.png" />

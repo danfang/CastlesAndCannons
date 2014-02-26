@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CastlesAndCannonsMonoGame
 {
-    static class Textures
+    public static class Textures
     {
         public static Texture2D normalPanelTexture;
         public static Texture2D knightTexture;
