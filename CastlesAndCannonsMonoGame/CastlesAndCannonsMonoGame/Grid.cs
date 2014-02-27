@@ -36,7 +36,7 @@ namespace CastlesAndCannonsMonoGame
         private Rectangle curHealthBar; // current health
         private Rectangle backgroundHealthBar; // background health
 
-       
+
         // Creates a new instance of Grid. Puts the Character in the Grid at row 2
         // column 2.
         public Grid()
@@ -54,7 +54,7 @@ namespace CastlesAndCannonsMonoGame
             PANEL_SIZE = (Game1.height - 100) / GRID_SIZE;
             GRID_WIDTH_OFFSET = (Game1.width - (PANEL_SIZE * GRID_SIZE)) / 2;
             GRID_HEIGHT_OFFSET = (Game1.height - (PANEL_SIZE * GRID_SIZE)) / 2;
-            ENEMY_SPAWN_BUFFER = PANEL_SIZE * 2;
+            ENEMY_SPAWN_BUFFER = PANEL_SIZE * 3;
             elapsedGameTime = 0;
             enemySpawnRate = .5f;
             generator = new Random();
@@ -63,19 +63,19 @@ namespace CastlesAndCannonsMonoGame
         // Creates the actual Grid and puts the Character in the Grid.
         private void LoadContent()
         {
-            for(int row = 0; row < GRID_SIZE; row++)
+            for (int row = 0; row < GRID_SIZE; row++)
             {
                 for (int col = 0; col < GRID_SIZE; col++)
                 {
                     panels[row, col] = new Panel(GRID_HEIGHT_OFFSET + row * PANEL_SIZE, GRID_WIDTH_OFFSET + col * PANEL_SIZE, PANEL_SIZE);
                 }
             }
-           c = new Knight(panels[2, 2].GetPosition(), PANEL_SIZE, 2, 2);
+            c = new Knight(panels[2, 2].GetPosition(), PANEL_SIZE, 2, 2);
         }
 
         public void UnloadContent()
         {
-            
+
         }
 
         // Updates the Grid class. In effect, it spawns new enemies, updates the cannonballs,
@@ -86,7 +86,7 @@ namespace CastlesAndCannonsMonoGame
             mousePosition.X = Mouse.GetState().X;
             mousePosition.Y = Mouse.GetState().Y;
 
-            elapsedGameTime += (float) gameTime.ElapsedGameTime.TotalSeconds;
+            elapsedGameTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             foreach (Panel p in panels)
             {
                 p.Update(gameTime, mousePosition);
@@ -105,6 +105,7 @@ namespace CastlesAndCannonsMonoGame
         private void UpdateCannonballs(GameTime gameTime)
         {
             Queue<Cannonball> toDestroy = new Queue<Cannonball>();
+            Queue<Cannonball> toRemove = new Queue<Cannonball>();
             foreach (Cannonball cannonball in enemies)
             {
                 cannonball.Update(gameTime);
@@ -112,20 +113,43 @@ namespace CastlesAndCannonsMonoGame
                 {
                     toDestroy.Enqueue(cannonball);
                 }
+                if (cannonball.Bounds().X > Game1.width || cannonball.Bounds().Y > Game1.height + (PANEL_SIZE * 4)
+                    || cannonball.Bounds().X < - (PANEL_SIZE * 3) || cannonball.Bounds().Y < - (PANEL_SIZE * 3))
+                {
+                    toRemove.Enqueue(cannonball);
+                }
             }
-            while (toDestroy.Count != 0)
+            DestroyCannonballs(toDestroy);
+            RemoveCannonballs(toRemove);
+            UpdateHealthBar();
+        }
+
+        // Destroys the Cannonball if the Cannonball hits the user.
+        private void DestroyCannonballs(Queue<Cannonball> collided)
+        {
+            while (collided.Count != 0)
             {
-                Cannonball collide = toDestroy.Dequeue();
+                Cannonball collide = collided.Dequeue();
                 enemies.Remove(collide);
                 c.Health -= collide.Damage;
-                Game1.scoreDisplay.Score += 100; // testing score
                 System.Diagnostics.Debug.WriteLine(c.Health);
                 if (c.Health == 0) // Character is dead
-                { 
+                {
                     System.Diagnostics.Debug.WriteLine("the character is dead");
                 }
             }
-            UpdateHealthBar();
+        }
+
+        // Removes the Cannonballs that are off the screen from the LinkedList of Cannonballs.
+        // Also updates the score.
+        private void RemoveCannonballs(Queue<Cannonball> toRemove)
+        {
+            while (toRemove.Count != 0)
+            {
+                Cannonball offScreen = toRemove.Dequeue();
+                enemies.Remove(offScreen);
+                Game1.scoreDisplay.Score += 100; // Add score for dodging CannonBall 
+            }
         }
 
         // Updates the health bar with the new character health if it changed.
@@ -136,7 +160,7 @@ namespace CastlesAndCannonsMonoGame
 
         // Draws the Grid, Cannonballs, and Knight
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-            {
+        {
             foreach (Panel p in panels)
             {
                 p.Draw(gameTime, spriteBatch);
@@ -188,7 +212,7 @@ namespace CastlesAndCannonsMonoGame
         private bool CheckSlashDirection(int slashDirection)
         {
             switch (slashDirection)
-        {
+            {
                 case 1:
                     if (c.Row - 1 < 0)
                         return false;
@@ -208,7 +232,7 @@ namespace CastlesAndCannonsMonoGame
             }
             return true;
         }
-        
+
         // TODO: Document
         private void SpawnEnemies(GameTime gameTime)
         {
@@ -218,10 +242,10 @@ namespace CastlesAndCannonsMonoGame
                 int seed = generator.Next((int)(1 / enemySpawnRate));
                 if (seed == 0)
                 {
-                    Cannonball.Direction direction = (Cannonball.Direction) generator.Next(1, 5);
+                    Cannonball.Direction direction = (Cannonball.Direction)generator.Next(1, 5);
                     int index = generator.Next(GRID_SIZE);
                     Vector2 position = new Vector2();
-                    switch (direction) 
+                    switch (direction)
                     {
                         case Cannonball.Direction.UP: // going up, starts at bottom
                             position = panels[GRID_SIZE - 1, index].GetPosition();
