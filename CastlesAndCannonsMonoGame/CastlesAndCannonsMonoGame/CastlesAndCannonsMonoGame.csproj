@@ -158,7 +158,6 @@
     </AppxManifest>
     <None Include="Assets\SpriteFont2.xnb" />
     <None Include="CastlesAndCannonsMonoGame_TemporaryKey.pfx" />
-    <Content Include="Common\Font.TTF" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\CannonBall.png" />
