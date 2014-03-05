@@ -49,7 +49,8 @@ namespace CastlesAndCannonsMonoGame
             isAlive = true;
             pos = position;
             bounds = new Rectangle((int)position.X, (int)position.Y, Grid.PANEL_SIZE, Grid.PANEL_SIZE);
-            actualBounds = new Rectangle((int)position.X, (int)position.Y, Grid.PANEL_SIZE / 3, Grid.PANEL_SIZE / 3);
+            float dividingConstant = (float) (3 / (Math.Sqrt(2)));
+            actualBounds = new Rectangle((int)position.X, (int)position.Y, (int) (Grid.PANEL_SIZE / dividingConstant), (int) (Grid.PANEL_SIZE / dividingConstant));
             switch (d) // Direction
             {
                 case Direction.UP: // up
