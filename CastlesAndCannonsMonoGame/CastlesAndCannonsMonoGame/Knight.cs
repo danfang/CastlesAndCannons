@@ -14,6 +14,7 @@ namespace CastlesAndCannonsMonoGame
     class Knight : Character
     {
         private int slashDirection; // 0 = no slash, 1 is top (goes clockwise)
+        private Panel slashedPanel;
         private float mouseAngle; // 1 is top (clockwise)
         private Func<float, float, float> GetAngle;
 
@@ -59,7 +60,7 @@ namespace CastlesAndCannonsMonoGame
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Textures.knightTexture, bounds, Color.White);
+            spriteBatch.Draw(Textures.knightTextures[direction], bounds, Color.White);
         }
 
         public int SlashDirection
@@ -68,6 +69,23 @@ namespace CastlesAndCannonsMonoGame
             {
                 return slashDirection;
             }
+            set
+            {
+                slashDirection = value;
+            }
         }
+
+        public Panel SlashedPanel
+        {
+            get
+            {
+                return slashedPanel;
+            }
+            set
+            {
+                slashedPanel = value;
+            }
+        }
+
     }
 }
