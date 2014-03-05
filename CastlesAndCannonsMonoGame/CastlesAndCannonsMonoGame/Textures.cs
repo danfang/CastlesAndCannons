@@ -12,7 +12,7 @@ namespace CastlesAndCannonsMonoGame
     public static class Textures
     {
         public static Texture2D normalPanelTexture;
-        public static Texture2D knightTexture;
+        public static Texture2D[] knightTextures = new Texture2D[4];
         public static Texture2D cannonTexture;
         public static Texture2D healthTexture;
         public static Texture2D backgroundTexture;
@@ -21,7 +21,10 @@ namespace CastlesAndCannonsMonoGame
         public static void LoadContent(Game game)
         {
             normalPanelTexture = game.Content.Load<Texture2D>("Tile");
-            knightTexture = game.Content.Load<Texture2D>("KnightSprite");
+            knightTextures[0] = game.Content.Load<Texture2D>("KnightSpriteUp");
+            knightTextures[1] = game.Content.Load<Texture2D>("KnightSpriteRight");
+            knightTextures[2] = game.Content.Load<Texture2D>("KnightSpriteDown");
+            knightTextures[3] = game.Content.Load<Texture2D>("KnightSpriteLeft");
             cannonTexture = game.Content.Load<Texture2D>("CannonBall");
             healthTexture = game.Content.Load<Texture2D>("Health");
             backgroundTexture = game.Content.Load<Texture2D>("HealthBackground");

@@ -24,6 +24,7 @@ namespace CastlesAndCannonsMonoGame
         protected Rectangle bounds;
         protected int size;
         protected bool isMoving;
+        protected int direction;
 
         public void UnloadContent()
         {
@@ -46,21 +47,25 @@ namespace CastlesAndCannonsMonoGame
             int tempCol = column;
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
+                direction = 3;
                 if (column > 0)
                     tempCol--;
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
+                direction = 1;
                 if (column < Math.Sqrt(panels.Length))
                     tempCol++;
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
+                direction = 0;
                 if (column >= 0)
                     tempRow--;
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
+                direction = 2;
                 if (column < Math.Sqrt(panels.Length))
                     tempRow++;
             }
