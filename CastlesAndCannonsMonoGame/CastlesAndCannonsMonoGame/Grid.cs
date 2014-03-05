@@ -35,6 +35,7 @@ namespace CastlesAndCannonsMonoGame
         private Random generator; // used to randomly generate enemies
         private Rectangle curHealthBar; // current health
         private Rectangle backgroundHealthBar; // background health
+        private Boolean isGameOver;
 
 
         // Creates a new instance of Grid. Puts the Character in the Grid at row 2
@@ -57,6 +58,7 @@ namespace CastlesAndCannonsMonoGame
             ENEMY_SPAWN_BUFFER = PANEL_SIZE * 3;
             elapsedGameTime = 0;
             enemySpawnRate = .5f;
+            isGameOver = false;
             generator = new Random();
         }
 
@@ -82,20 +84,27 @@ namespace CastlesAndCannonsMonoGame
         // moves the character if there is movement.
         public void Update(GameTime gameTime)
         {
-            backgroundHealthBar = new Rectangle(50, 20, 100, 20);
-            mousePosition.X = Mouse.GetState().X;
-            mousePosition.Y = Mouse.GetState().Y;
-
-            elapsedGameTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            foreach (Panel p in panels)
+            if (!isGameOver)
             {
-                p.Update(gameTime, mousePosition);
-                p.Slashed(false);
+                backgroundHealthBar = new Rectangle(50, 20, 100, 20);
+                mousePosition.X = Mouse.GetState().X;
+                mousePosition.Y = Mouse.GetState().Y;
+
+                elapsedGameTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                foreach (Panel p in panels)
+                {
+                    p.Update(gameTime, mousePosition);
+                    p.Slashed(false);
+                }
+                SpawnEnemies(gameTime);
+                UpdateCannonballs(gameTime);
+                Slash();
+                c.Update(gameTime, panels);
             }
-            SpawnEnemies(gameTime);
-            UpdateCannonballs(gameTime);
-            Slash();
-            c.Update(gameTime, panels);
+            else
+            {
+                UnloadContent();
+            }
         }
 
         // Updates all of the cannonballs and if a collision occurs, removes
@@ -136,6 +145,7 @@ namespace CastlesAndCannonsMonoGame
                 if (c.Health == 0) // Character is dead
                 {
                     System.Diagnostics.Debug.WriteLine("the character is dead");
+                    isGameOver = true;
                 }
             }
         }
@@ -161,18 +171,26 @@ namespace CastlesAndCannonsMonoGame
         // Draws the Grid, Cannonballs, and Knight
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            foreach (Panel p in panels)
+            if (!isGameOver)
             {
-                p.Draw(gameTime, spriteBatch);
-            }
+                foreach (Panel p in panels)
+                {
+                    p.Draw(gameTime, spriteBatch);
+                }
 
-            foreach (Cannonball cannonball in enemies)
-            {
-                cannonball.Draw(gameTime, spriteBatch);
+                foreach (Cannonball cannonball in enemies)
+                {
+                    cannonball.Draw(gameTime, spriteBatch);
+                }
+                ((Knight)c).Draw(gameTime, spriteBatch);
+                spriteBatch.Draw(Textures.backgroundTexture, backgroundHealthBar, Color.White);
+                spriteBatch.Draw(Textures.healthTexture, curHealthBar, Color.Red);
             }
-            ((Knight)c).Draw(gameTime, spriteBatch);
-            spriteBatch.Draw(Textures.backgroundTexture, backgroundHealthBar, Color.White);
-            spriteBatch.Draw(Textures.healthTexture, curHealthBar, Color.Red);
+            else // game is over
+            {
+                GameOverScreen g = new GameOverScreen();
+                g.Draw(gameTime, spriteBatch);
+            }
         }
 
         // Returns the Character playing.
@@ -205,7 +223,6 @@ namespace CastlesAndCannonsMonoGame
                     }
                 }
             }
-
         }
 
         // TODO: Document
