@@ -25,6 +25,7 @@ namespace CastlesAndCannonsMonoGame
         protected int size;
         protected bool isMoving;
         protected bool canPressKey;
+        protected int direction;
 
         public Character(Vector2 pos, int newSize, int row, int col)
         {
@@ -70,21 +71,25 @@ namespace CastlesAndCannonsMonoGame
             {
                 if (pressed.Contains(Keys.A))
                 {
+                    direction = 3;
                     if (column > 0)
                         tempCol = column - 1;
                 }
                 else if (pressed.Contains(Keys.D))
                 {
+                    direction = 1;
                     if (column < Math.Sqrt(panels.Length) - 1)
                         tempCol = column + 1;
                 }
                 else if (pressed.Contains(Keys.W))
                 {
+                    direction = 0;
                     if (row > 0)
                         tempRow = row - 1;
                 }
                 else if (pressed.Contains(Keys.S))
                 {
+                    direction = 2;
                     if (row < Math.Sqrt(panels.Length) - 1)
                         tempRow = row + 1;
                 }

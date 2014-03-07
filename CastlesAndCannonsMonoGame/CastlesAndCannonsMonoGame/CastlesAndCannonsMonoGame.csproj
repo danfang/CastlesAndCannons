@@ -138,6 +138,7 @@
     </Compile>
     <Compile Include="Cannonball.cs" />
     <Compile Include="Character.cs" />
+    <Compile Include="GameOverScreen.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
@@ -161,9 +162,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\CannonBall.png" />
+    <Content Include="Assets\gameovertemp.png" />
     <Content Include="Assets\Health.png" />
     <Content Include="Assets\HealthBackground.png" />
-    <Content Include="Assets\KnightSprite.png" />
+    <Content Include="Assets\KnightSpriteRight.png" />
+    <Content Include="Assets\KnightSpriteLeft.png" />
+    <Content Include="Assets\KnightSpriteUp.png" />
+    <Content Include="Assets\KnightSpriteDown.png" />
     <Content Include="Assets\KnightSpriteTemp.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SmallLogo.png" />

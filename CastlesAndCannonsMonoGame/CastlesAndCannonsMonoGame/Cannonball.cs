@@ -35,7 +35,8 @@ namespace CastlesAndCannonsMonoGame
         private Vector2 velocity;
         private bool isAlive;
         private Vector2 pos;
-        private Rectangle bounds; // make circle at some point
+        private Rectangle bounds; // used for drawing the actual CannonBall
+        private Rectangle collisionBounds; // used for collisions
         
         // Constructs a new Cannonball. Direction d represents the direction
         // the Cannonball is going to be going and the Vector2, position, represents
@@ -48,7 +49,9 @@ namespace CastlesAndCannonsMonoGame
             isAlive = true;
             pos = position;
             bounds = new Rectangle((int)position.X, (int)position.Y, Grid.PANEL_SIZE, Grid.PANEL_SIZE);
-            switch (d)
+            float dividingConstant = (float) (3 / (Math.Sqrt(2)));
+            collisionBounds = new Rectangle((int)position.X, (int)position.Y, (int) (Grid.PANEL_SIZE / dividingConstant), (int) (Grid.PANEL_SIZE / dividingConstant));
+            switch (d) // Direction
             {
                 case Direction.UP: // up
                     velocity = new Vector2(0, -1 * speed);
@@ -75,6 +78,8 @@ namespace CastlesAndCannonsMonoGame
                 pos.Y += velocity.Y; 
                 bounds.X = (int) pos.X;
                 bounds.Y = (int) pos.Y;
+                collisionBounds.X = (int)pos.X;
+                collisionBounds.Y = (int)pos.Y;
             }
 
         }
@@ -89,6 +94,11 @@ namespace CastlesAndCannonsMonoGame
         public Rectangle Bounds()
         {
             return bounds;
+        }
+
+        public Rectangle ActualBounds()
+        {
+            return collisionBounds;
         }
 
         // Returns the amount of damage the Cannonball deals.
