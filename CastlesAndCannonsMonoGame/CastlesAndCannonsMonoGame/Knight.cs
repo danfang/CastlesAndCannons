@@ -24,18 +24,9 @@ namespace CastlesAndCannonsMonoGame
 
 
         public Knight(Vector2 pos, int newSize, int row, int col)
+           : base(pos, newSize, row, col)
         {
             GetAngle = (x, y) => (float) Math.Atan2(y, x);
-            health = 100;
-            mana = 100;
-            armor = 2;
-            speed = 10f; // The unit for speed is pixels per update.
-            position = pos;
-            size = newSize;
-            this.row = row;
-            this.column = col;
-            bounds = new Rectangle((int) position.X, (int) position.Y, size, size);
-            isMoving = false;
         }
 
         public void Update(GameTime gameTime)

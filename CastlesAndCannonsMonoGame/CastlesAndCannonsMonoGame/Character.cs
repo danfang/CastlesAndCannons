@@ -24,6 +24,23 @@ namespace CastlesAndCannonsMonoGame
         protected Rectangle bounds;
         protected int size;
         protected bool isMoving;
+        protected bool canPressKey;
+
+        public Character(Vector2 pos, int newSize, int row, int col)
+        {
+            health = 100;
+            mana = 100;
+            armor = 2;
+            speed = 10f; // The unit for speed is pixels per update.
+            position = pos;
+            desiredPos = pos;
+            size = newSize;
+            this.row = row;
+            this.column = col;
+            bounds = new Rectangle((int)position.X, (int)position.Y, size, size);
+            isMoving = false;
+            canPressKey = true;
+        }
 
         public void UnloadContent()
         {
@@ -42,44 +59,40 @@ namespace CastlesAndCannonsMonoGame
         // (W for up, A for left, S for down, and D for right)
         private void MoveCharacter(Panel[, ] panels)
         {
+            Keys[] pressed = Keyboard.GetState().GetPressedKeys();
+            if (pressed.Length == 0 && !canPressKey)
+            {
+                canPressKey = true;
+            }
             int tempRow = row;
             int tempCol = column;
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            if (pressed.Length > 0 && !isMoving && canPressKey)
             {
-                if (column > 0)
-                    tempCol--;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.D))
-            {
-                if (column < Math.Sqrt(panels.Length))
-                    tempCol++;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.W))
-            {
-                if (column >= 0)
-                    tempRow--;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.S))
-            {
-                if (column < Math.Sqrt(panels.Length))
-                    tempRow++;
-            }
-            // TODO: temp fix... checking bounds
-            if (tempRow < 0)
-            {
-                tempRow++;  
-            }
-            if (tempRow > Math.Sqrt(panels.Length) - 1)
-            {
-                tempRow--;
-            }
-            if (tempCol > Math.Sqrt(panels.Length) - 1)
-            {
-                tempCol--;
-            }
-            if (tempCol < 0)
-            {
-                tempCol++;
+                if (pressed.Contains(Keys.A))
+                {
+                    if (column > 0)
+                        tempCol = column - 1;
+                }
+                else if (pressed.Contains(Keys.D))
+                {
+                    if (column < Math.Sqrt(panels.Length) - 1)
+                        tempCol = column + 1;
+                }
+                else if (pressed.Contains(Keys.W))
+                {
+                    if (row > 0)
+                        tempRow = row - 1;
+                }
+                else if (pressed.Contains(Keys.S))
+                {
+                    if (row < Math.Sqrt(panels.Length) - 1)
+                        tempRow = row + 1;
+                }
+                desiredPos = panels[tempRow, tempCol].GetPosition();
+                column = tempCol;
+                row = tempRow;
+                canPressKey = false;
+                isMoving = true;
             }
             Move(panels[tempRow, tempCol].GetPosition(), tempRow, tempCol);
         }
@@ -130,13 +143,13 @@ namespace CastlesAndCannonsMonoGame
             }
             else
             {
-                if (!newPos.Equals(position))
-                {
-                    row = newRow;
-                    column = newCol;
-                    desiredPos = newPos;
-                    isMoving = true;
-                }
+                //if (!newPos.Equals(position))
+                //{
+                //    row = newRow;
+                //    column = newCol;
+                //    desiredPos = newPos;
+                //    //isMoving = true;
+                //}
             }
         }
 
