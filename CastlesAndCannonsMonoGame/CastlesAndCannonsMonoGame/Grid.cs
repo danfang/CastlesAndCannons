@@ -373,13 +373,13 @@ namespace CastlesAndCannonsMonoGame
             position = panels[c.Row, 0].Position;
             position.X -= ENEMY_SPAWN_BUFFER;
             enemies.AddLast(new Cannonball(Cannonball.Direction.RIGHT, position, 12));
-            position = panels[c.Row, GRID_SIZE - 1].GetPosition();
+            position = panels[c.Row, GRID_SIZE - 1].Position;
             position.X += ENEMY_SPAWN_BUFFER;
             enemies.AddLast(new Cannonball(Cannonball.Direction.LEFT, position, 12));
-            position = panels[GRID_SIZE - 1, c.Column].GetPosition();
+            position = panels[GRID_SIZE - 1, c.Column].Position;
             position.Y += ENEMY_SPAWN_BUFFER;
             enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, 12));
-            position = panels[0, c.Column].GetPosition();
+            position = panels[0, c.Column].Position;
             position.Y -= ENEMY_SPAWN_BUFFER;
             enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, 12));
             selectedPattern = Pattern.NOT_SELECTED;
