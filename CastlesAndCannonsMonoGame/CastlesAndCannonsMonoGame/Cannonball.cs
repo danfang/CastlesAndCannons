@@ -36,6 +36,7 @@ namespace CastlesAndCannonsMonoGame
         private Vector2 pos;
         private Rectangle bounds; // used for drawing the actual CannonBall
         private Rectangle collisionBounds; // used for collisions
+        private float ADJUSTMENT_CONSTANT = (float)(3 / (Math.Sqrt(2))); // adjusts bounds for the circle
         
         // Constructs a new Cannonball. Direction d represents the direction
         // the Cannonball is going to be going and the Vector2, position, represents
@@ -49,8 +50,9 @@ namespace CastlesAndCannonsMonoGame
             pos = position;
             bounds = new Rectangle((int)position.X, (int)position.Y, Grid.PANEL_SIZE, Grid.PANEL_SIZE);
             float dividingConstant = (float) (3 / (Math.Sqrt(2)));
-            collisionBounds = new Rectangle((int)position.X, (int)position.Y, (int) (Grid.PANEL_SIZE / dividingConstant), (int) (Grid.PANEL_SIZE / dividingConstant));
-            collisionBounds.Offset(new Point(500, 500));
+            collisionBounds = new Rectangle((int)position.X, (int)position.Y, (int)(Grid.PANEL_SIZE / ADJUSTMENT_CONSTANT), (int)(Grid.PANEL_SIZE / ADJUSTMENT_CONSTANT));
+            collisionBounds.Offset(Grid.PANEL_SIZE / 2, Grid.PANEL_SIZE / 2);
+            collisionBounds.Offset(-(int)(Grid.PANEL_SIZE / ADJUSTMENT_CONSTANT), -(int)(Grid.PANEL_SIZE / ADJUSTMENT_CONSTANT));
             switch (d) // Direction
             {
                 case Direction.UP: // up
@@ -80,6 +82,8 @@ namespace CastlesAndCannonsMonoGame
                 bounds.Y = (int) pos.Y;
                 collisionBounds.X = (int)(pos.X);
                 collisionBounds.Y = (int)(pos.Y);
+                collisionBounds.Offset(Grid.PANEL_SIZE / 2, Grid.PANEL_SIZE / 2);
+                collisionBounds.Offset(-(int)(Grid.PANEL_SIZE / 2 / ADJUSTMENT_CONSTANT), -(int)(Grid.PANEL_SIZE / 2 / ADJUSTMENT_CONSTANT));
             }
 
         }
