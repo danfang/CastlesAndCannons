@@ -7,6 +7,7 @@ using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using FarseerPhysics;
 
 namespace CastlesAndCannonsMonoGame
@@ -17,6 +18,7 @@ namespace CastlesAndCannonsMonoGame
         private Panel slashedPanel;
         private float mouseAngle; // 1 is top (clockwise)
         private Func<float, float, float> GetAngle;
+        private Point mouseClick;
 
         public enum SlashDirections
         {
@@ -30,8 +32,12 @@ namespace CastlesAndCannonsMonoGame
             GetAngle = (x, y) => (float) Math.Atan2(y, x);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Panel[,] grid)
         {
+            base.Update(gameTime, grid);
+            SlashedPanel = null;
+            SlashDirection = 0;
+            Slash(grid);
             
         }
 
@@ -49,7 +55,7 @@ namespace CastlesAndCannonsMonoGame
                 slashDirection = 4;
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Textures.knightTextures[direction], bounds, Color.White);
         }
@@ -76,6 +82,61 @@ namespace CastlesAndCannonsMonoGame
             {
                 slashedPanel = value;
             }
+        }
+        // TODO: Possible moving to Knight and implement in Knight Update?
+        private void Slash(Panel[,] panels)
+        {
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                mouseClick.X = Mouse.GetState().X;
+                mouseClick.Y = Mouse.GetState().Y;
+                Slash(mouseClick);
+
+                if (CheckSlashDirection(SlashDirection) && !IsMoving)
+                {
+                    switch (SlashDirection)
+                    {
+                        case 1:
+                            SlashedPanel = panels[Row - 1, Column];
+                            break;
+                        case 2:
+                            SlashedPanel = panels[Row, Column + 1];
+                            break;
+                        case 3:
+                            SlashedPanel = panels[Row + 1, Column];
+                            break;
+                        case 4:
+                            SlashedPanel = panels[Row, Column - 1];
+                            break;
+                    }
+                    SlashedPanel.Slashed(true);
+                }
+            }
+        }
+
+        // TODO: Document
+        private bool CheckSlashDirection(int slashDirection)
+        {
+            switch (slashDirection)
+            {
+                case 1:
+                    if (Row - 1 < 0)
+                        return false;
+                    break;
+                case 2:
+                    if (Column + 1 > Grid.GRID_SIZE - 1)
+                        return false;
+                    break;
+                case 3:
+                    if (Row + 1 > Grid.GRID_SIZE - 1)
+                        return false;
+                    break;
+                case 4:
+                    if (Column - 1 < 0)
+                        return false;
+                    break;
+            }
+            return true;
         }
 
     }
