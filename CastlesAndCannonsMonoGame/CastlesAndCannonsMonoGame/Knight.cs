@@ -16,9 +16,8 @@ namespace CastlesAndCannonsMonoGame
     {
         private int slashDirection; // 0 = no slash, 1 is top (goes clockwise)
         private Panel slashedPanel;
-        private float mouseAngle; // 1 is top (clockwise)
+        private float mouseAngle;
         private Func<float, float, float> GetAngle;
-        private Point mouseClick;
 
         public enum SlashDirections
         {
@@ -32,14 +31,22 @@ namespace CastlesAndCannonsMonoGame
             GetAngle = (x, y) => (float) Math.Atan2(y, x);
         }
 
-        public void Update(GameTime gameTime, Panel[,] grid)
+        public override void Update(GameTime gameTime, Panel[,] grid)
         {
-            base.Update(gameTime, grid);
+            base.MoveCharacter(grid);
             SlashedPanel = null;
             SlashDirection = 0;
             Slash(grid);
         }
         
+        // Draws the knight sprite.
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(Textures.knightTextures[direction], bounds, Color.White);
+        }
+
+        // Calculates the slash direction based on a given mouse click (one of four
+        // directions) relative to the knight.
         public void Slash(Point mouseClick)
         {
             mouseAngle = GetAngle(mouseClick.X - position.X, position.Y - mouseClick.Y) * 180 / (float) Math.PI;
@@ -53,46 +60,18 @@ namespace CastlesAndCannonsMonoGame
                 slashDirection = 4;
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(Textures.knightTextures[direction], bounds, Color.White);
-        }
-
+        // Checks the collision between the knight slashed panel and the given cannonball.
+        // Adds the cannonball to the toRemove queue if a collision is detected.
         public void removeCannonBall(Cannonball cannonball, Queue<Cannonball> toRemove)
         {
-            if (SlashedPanel != null && cannonball.Bounds().Intersects((SlashedPanel.GetBounds())))
+            if (SlashedPanel != null && cannonball.Bounds.Intersects(SlashedPanel.Bounds))
             {
                 toRemove.Enqueue(cannonball);
                 Game1.scoreDisplay.Score += 900;
             }
         }
 
-        public int SlashDirection
-        {
-            get
-            {
-                return slashDirection;
-            }
-            set
-            {
-                slashDirection = value;
-            }
-        }
-
-        public Panel SlashedPanel
-        {
-            get
-            {
-                return slashedPanel;
-            }
-            set
-            {
-                slashedPanel = value;
-            }
-        }
-
-
-        //
+        // Sets the pointer to the desired slashed panel.
         private void Slash(Panel[,] panels)
         {
             if (Grid.mouseClicked)
@@ -116,12 +95,12 @@ namespace CastlesAndCannonsMonoGame
                             SlashedPanel = panels[Row, Column - 1];
                             break;
                     }
-                    SlashedPanel.Slashed(true);
+                    SlashedPanel.Slashed = true;
                 }
             }
         }
 
-        // returns true if the desired slash direction is valid (within the bounds of
+        // Returns true if the desired slash direction is valid (within the bounds of
         // the grid) and returns false otherwise.
         private bool CheckSlashDirection(int slashDirection)
         {
@@ -145,6 +124,34 @@ namespace CastlesAndCannonsMonoGame
                     break;
             }
             return true;
+        }
+
+        /*******************
+        * GET/SET METHODS *
+        *******************/
+
+        public int SlashDirection
+        {
+            get
+            {
+                return slashDirection;
+            }
+            set
+            {
+                slashDirection = value;
+            }
+        }
+
+        public Panel SlashedPanel
+        {
+            get
+            {
+                return slashedPanel;
+            }
+            set
+            {
+                slashedPanel = value;
+            }
         }
 
     }

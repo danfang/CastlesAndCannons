@@ -62,20 +62,37 @@ namespace CastlesAndCannonsMonoGame
                 spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.White);
         }
 
-        public Rectangle GetBounds()
+        /*******************
+         * GET/SET METHODS *
+        *******************/
+
+        public Rectangle Bounds
         {
-            return bounds;
+            get
+            {
+                return bounds;
+            }
         }
 
-        public Vector2 GetPosition()
+        public Vector2 Position
         {
-            Point p = bounds.Location;
-            return new Vector2(p.X, p.Y);
+            get
+            {
+                Point p = bounds.Location;
+                return new Vector2(p.X, p.Y);
+            }
         }
 
-        public void Slashed(bool newSlash)
+        public bool Slashed
         {
-            isSlashed = newSlash;
+            get
+            {
+                return isSlashed;
+            }
+            set 
+            {
+                isSlashed = value;
+            }
         }
     }
 }
