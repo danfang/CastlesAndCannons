@@ -24,19 +24,20 @@ namespace CastlesAndCannonsMonoGame
         public static int GRID_HEIGHT_OFFSET;
         public static int ENEMY_SPAWN_BUFFER;
         public static float elapsedGameTime;
+        public static bool mouseClicked;
+        public static Point mouseClick;
         private const int NUMBER_OF_PATTERNS = 4;
         private Panel[,] panels;
         private int score; // to be implemented
         private LinkedList<Cannonball> enemies;
         private Character c;
         private Point mousePosition;
-        private Point mouseClick;
         private float enemySpawnRate; // enemies per second
         private float enemySpawnTimer; // 
         private Random generator; // used to randomly generate enemies
         private Rectangle curHealthBar; // current health
         private Rectangle backgroundHealthBar; // background health
-        private Boolean isGameOver;
+        private bool isGameOver;
         private Pattern selectedPattern; // -1 if not selected
         private int patternCount;
 
@@ -98,11 +99,21 @@ namespace CastlesAndCannonsMonoGame
         // moves the character if there is movement.
         public void Update(GameTime gameTime)
         {
+            mousePosition.X = Mouse.GetState().X;
+            mousePosition.Y = Mouse.GetState().Y;
+
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                mouseClicked = true;
+                mouseClick.X = mousePosition.X;
+                mouseClick.Y = mousePosition.Y;
+            }
+            else
+                mouseClicked = false;
+
             if (!isGameOver)
             {
                 backgroundHealthBar = new Rectangle(50, 20, 100, 20);
-                mousePosition.X = Mouse.GetState().X;
-                mousePosition.Y = Mouse.GetState().Y;
 
                 elapsedGameTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 foreach (Panel p in panels)
@@ -112,10 +123,8 @@ namespace CastlesAndCannonsMonoGame
                 }
                 SpawnEnemies(gameTime);
                 UpdateCannonballs(gameTime);
-                if (c.GetType().Equals("Knight"))
-                {
-                ((Knight)c).Update(gameTime, panels);
-            }
+                if (c.GetType().Equals(typeof(Knight)))
+                    ((Knight)c).Update(gameTime, panels);
             }
             else
             {
@@ -134,24 +143,17 @@ namespace CastlesAndCannonsMonoGame
             foreach (Cannonball cannonball in enemies)
             {
                 cannonball.Update(gameTime);
+
                 if (cannonball.ActualBounds().Intersects(c.Bounds()))
-                {
                     toDestroy.Enqueue(cannonball);
-                }
-                if (c.GetType().Equals("Knight"))
-                {
-                if (((Knight)c).SlashedPanel != null &&
-                    (cannonball.Bounds().Intersects(((Knight)c).SlashedPanel.GetBounds())))
-                {
-                    toRemove.Enqueue(cannonball);
-                    Game1.scoreDisplay.Score += 900;
-                }
-                }
+
+                if (c.GetType().Equals(typeof(Knight)))
+                    ((Knight)c).removeCannonBall(cannonball, toRemove);
+
                 if (cannonball.Bounds().X > Game1.width || cannonball.Bounds().Y > Game1.height + (PANEL_SIZE * 4)
                     || cannonball.Bounds().X < -(PANEL_SIZE * 3) || cannonball.Bounds().Y < -(PANEL_SIZE * 3))
-                {
                     toRemove.Enqueue(cannonball);
-                }
+
             }
             DestroyCannonballs(toDestroy);
             RemoveCannonballs(toRemove);
@@ -199,14 +201,11 @@ namespace CastlesAndCannonsMonoGame
             if (!isGameOver)
             {
                 foreach (Panel p in panels)
-                {
                     p.Draw(gameTime, spriteBatch);
-                }
 
                 foreach (Cannonball cannonball in enemies)
-                {
                     cannonball.Draw(gameTime, spriteBatch);
-                }
+
                 c.Draw(gameTime, spriteBatch);
                 spriteBatch.Draw(Textures.backgroundTexture, backgroundHealthBar, Color.White);
                 spriteBatch.Draw(Textures.healthTexture, curHealthBar, Color.Red);
@@ -224,8 +223,6 @@ namespace CastlesAndCannonsMonoGame
             return c;
         }
 
-        
-
         // Spawns a single Cannonball.
         private void SpawnEnemies(GameTime gameTime)
         {
@@ -233,9 +230,8 @@ namespace CastlesAndCannonsMonoGame
             if (timer < 0)
             {
                 if (selectedPattern == Pattern.NOT_SELECTED)
-                {
                     selectedPattern = (Pattern)generator.Next(1, NUMBER_OF_PATTERNS + 1);
-                }
+
                 activatePattern();
             }
         }

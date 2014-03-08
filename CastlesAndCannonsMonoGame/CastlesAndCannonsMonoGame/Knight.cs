@@ -25,7 +25,7 @@ namespace CastlesAndCannonsMonoGame
             UP, RIGHT, LEFT, DOWN
         }
 
-
+        //
         public Knight(Vector2 pos, int newSize, int row, int col)
            : base(pos, newSize, row, col)
         {
@@ -38,9 +38,7 @@ namespace CastlesAndCannonsMonoGame
             SlashedPanel = null;
             SlashDirection = 0;
             Slash(grid);
-            
         }
-
         
         public void Slash(Point mouseClick)
         {
@@ -58,6 +56,15 @@ namespace CastlesAndCannonsMonoGame
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Textures.knightTextures[direction], bounds, Color.White);
+        }
+
+        public void removeCannonBall(Cannonball cannonball, Queue<Cannonball> toRemove)
+        {
+            if (SlashedPanel != null && cannonball.Bounds().Intersects((SlashedPanel.GetBounds())))
+            {
+                toRemove.Enqueue(cannonball);
+                Game1.scoreDisplay.Score += 900;
+            }
         }
 
         public int SlashDirection
@@ -83,14 +90,14 @@ namespace CastlesAndCannonsMonoGame
                 slashedPanel = value;
             }
         }
-        // TODO: Possible moving to Knight and implement in Knight Update?
+
+
+        //
         private void Slash(Panel[,] panels)
         {
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (Grid.mouseClicked)
             {
-                mouseClick.X = Mouse.GetState().X;
-                mouseClick.Y = Mouse.GetState().Y;
-                Slash(mouseClick);
+                Slash(Grid.mouseClick);
 
                 if (CheckSlashDirection(SlashDirection) && !IsMoving)
                 {
@@ -114,7 +121,8 @@ namespace CastlesAndCannonsMonoGame
             }
         }
 
-        // TODO: Document
+        // returns true if the desired slash direction is valid (within the bounds of
+        // the grid) and returns false otherwise.
         private bool CheckSlashDirection(int slashDirection)
         {
             switch (slashDirection)
