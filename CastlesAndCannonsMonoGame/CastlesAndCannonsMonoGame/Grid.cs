@@ -112,7 +112,10 @@ namespace CastlesAndCannonsMonoGame
                 }
                 SpawnEnemies(gameTime);
                 UpdateCannonballs(gameTime);
+                if (c.GetType().Equals("Knight"))
+                {
                 ((Knight)c).Update(gameTime, panels);
+            }
             }
             else
             {
@@ -135,11 +138,14 @@ namespace CastlesAndCannonsMonoGame
                 {
                     toDestroy.Enqueue(cannonball);
                 }
+                if (c.GetType().Equals("Knight"))
+                {
                 if (((Knight)c).SlashedPanel != null &&
                     (cannonball.Bounds().Intersects(((Knight)c).SlashedPanel.GetBounds())))
                 {
                     toRemove.Enqueue(cannonball);
                     Game1.scoreDisplay.Score += 900;
+                }
                 }
                 if (cannonball.Bounds().X > Game1.width || cannonball.Bounds().Y > Game1.height + (PANEL_SIZE * 4)
                     || cannonball.Bounds().X < -(PANEL_SIZE * 3) || cannonball.Bounds().Y < -(PANEL_SIZE * 3))
@@ -201,7 +207,7 @@ namespace CastlesAndCannonsMonoGame
                 {
                     cannonball.Draw(gameTime, spriteBatch);
                 }
-                ((Knight)c).Draw(gameTime, spriteBatch);
+                c.Draw(gameTime, spriteBatch);
                 spriteBatch.Draw(Textures.backgroundTexture, backgroundHealthBar, Color.White);
                 spriteBatch.Draw(Textures.healthTexture, curHealthBar, Color.Red);
             }

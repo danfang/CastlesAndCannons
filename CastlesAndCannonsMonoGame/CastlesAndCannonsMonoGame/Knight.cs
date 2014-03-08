@@ -38,7 +38,7 @@ namespace CastlesAndCannonsMonoGame
             SlashedPanel = null;
             SlashDirection = 0;
             Slash(grid);
-
+            
         }
 
         
