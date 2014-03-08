@@ -114,8 +114,11 @@ namespace CastlesAndCannonsMonoGame
                 Slash();
                 UpdateCannonballs(gameTime);
                 c.Update(gameTime, panels);
-                ((Knight)c).SlashedPanel = null;
-                ((Knight)c).SlashDirection = 0;
+                if (c.GetType().Equals("Knight"))
+                {
+                    ((Knight)c).SlashedPanel = null;
+                    ((Knight)c).SlashDirection = 0;
+                }
             }
             else
             {
@@ -138,11 +141,14 @@ namespace CastlesAndCannonsMonoGame
                 {
                     toDestroy.Enqueue(cannonball);
                 }
-                if (((Knight)c).SlashedPanel != null &&
-                    (cannonball.Bounds().Intersects(((Knight)c).SlashedPanel.GetBounds())))
+                if (c.GetType().Equals("Knight"))
                 {
-                    toRemove.Enqueue(cannonball);
-                    Game1.scoreDisplay.Score += 900;
+                    if (((Knight)c).SlashedPanel != null &&
+                        (cannonball.Bounds().Intersects(((Knight)c).SlashedPanel.GetBounds())))
+                    {
+                        toRemove.Enqueue(cannonball);
+                        Game1.scoreDisplay.Score += 900;
+                    }
                 }
                 if (cannonball.Bounds().X > Game1.width || cannonball.Bounds().Y > Game1.height + (PANEL_SIZE * 4)
                     || cannonball.Bounds().X < -(PANEL_SIZE * 3) || cannonball.Bounds().Y < -(PANEL_SIZE * 3))
@@ -204,7 +210,7 @@ namespace CastlesAndCannonsMonoGame
                 {
                     cannonball.Draw(gameTime, spriteBatch);
                 }
-                ((Knight)c).Draw(gameTime, spriteBatch);
+                c.Draw(gameTime, spriteBatch);
                 spriteBatch.Draw(Textures.backgroundTexture, backgroundHealthBar, Color.White);
                 spriteBatch.Draw(Textures.healthTexture, curHealthBar, Color.Red);
             }
@@ -228,26 +234,28 @@ namespace CastlesAndCannonsMonoGame
             {
                 mouseClick.X = Mouse.GetState().X;
                 mouseClick.Y = Mouse.GetState().Y;
-                ((Knight)c).Slash(mouseClick);
-
-                if (CheckSlashDirection(((Knight)c).SlashDirection) && !c.IsMoving)
+                if (c.GetType().Equals("Knight"))
                 {
-                    switch (((Knight)c).SlashDirection)
+                    ((Knight)c).Slash(mouseClick);
+                    if (CheckSlashDirection(((Knight)c).SlashDirection) && !c.IsMoving)
                     {
-                        case 1:
-                            ((Knight)c).SlashedPanel = panels[c.Row - 1, c.Column];
-                            break;
-                        case 2:
-                            ((Knight)c).SlashedPanel = panels[c.Row, c.Column + 1];
-                            break;
-                        case 3:
-                            ((Knight)c).SlashedPanel = panels[c.Row + 1, c.Column];
-                            break;
-                        case 4:
-                            ((Knight)c).SlashedPanel = panels[c.Row, c.Column - 1];
-                            break;
+                        switch (((Knight)c).SlashDirection)
+                        {
+                            case 1:
+                                ((Knight)c).SlashedPanel = panels[c.Row - 1, c.Column];
+                                break;
+                            case 2:
+                                ((Knight)c).SlashedPanel = panels[c.Row, c.Column + 1];
+                                break;
+                            case 3:
+                                ((Knight)c).SlashedPanel = panels[c.Row + 1, c.Column];
+                                break;
+                            case 4:
+                                ((Knight)c).SlashedPanel = panels[c.Row, c.Column - 1];
+                                break;
+                        }
+                        ((Knight)c).SlashedPanel.Slashed(true);
                     }
-                    ((Knight)c).SlashedPanel.Slashed(true);
                 }
             }
         }

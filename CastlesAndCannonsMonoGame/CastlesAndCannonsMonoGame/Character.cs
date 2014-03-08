@@ -11,7 +11,7 @@ using FarseerPhysics;
 
 namespace CastlesAndCannonsMonoGame
 {
-    class Character
+    abstract class Character
     {
         protected int health;
         protected int mana;
@@ -104,10 +104,7 @@ namespace CastlesAndCannonsMonoGame
 
 
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            
-        }
+        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
         // Moves the character depending on what direction the user presses
         // (WASD). Vector2, newPos, represents the new position that the user

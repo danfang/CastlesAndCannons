@@ -49,7 +49,7 @@ namespace CastlesAndCannonsMonoGame
                 slashDirection = 4;
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Textures.knightTextures[direction], bounds, Color.White);
         }
