@@ -11,7 +11,7 @@ using FarseerPhysics;
 
 namespace CastlesAndCannonsMonoGame
 {
-    class Character
+    abstract class Character
     {
         protected int health;
         protected int mana;
@@ -22,6 +22,7 @@ namespace CastlesAndCannonsMonoGame
         protected int row;
         protected int column;
         protected Rectangle bounds;
+        protected Rectangle movingBounds;
         protected int size;
         protected bool isMoving;
         protected bool canPressKey;
@@ -39,6 +40,7 @@ namespace CastlesAndCannonsMonoGame
             this.row = row;
             this.column = col;
             bounds = new Rectangle((int)position.X, (int)position.Y, size, size);
+            movingBounds = new Rectangle((int)position.X + size/4, (int)position.Y + size/4, size / 2, size/ 2);
             isMoving = false;
             canPressKey = true;
         }
@@ -104,10 +106,7 @@ namespace CastlesAndCannonsMonoGame
 
 
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            
-        }
+        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
         // Moves the character depending on what direction the user presses
         // (WASD). Vector2, newPos, represents the new position that the user
@@ -156,6 +155,8 @@ namespace CastlesAndCannonsMonoGame
                 //    //isMoving = true;
                 //}
             }
+            movingBounds.X = bounds.X + size / 4;
+            movingBounds.Y = bounds.Y + size / 4;
         }
 
         /*******************
@@ -264,6 +265,8 @@ namespace CastlesAndCannonsMonoGame
 
         public Rectangle Bounds()
         {
+            if(isMoving) 
+                return movingBounds;
             return bounds;
         }
 

@@ -111,11 +111,8 @@ namespace CastlesAndCannonsMonoGame
                     p.Slashed(false);
                 }
                 SpawnEnemies(gameTime);
-                Slash();
                 UpdateCannonballs(gameTime);
-                c.Update(gameTime, panels);
-                ((Knight)c).SlashedPanel = null;
-                ((Knight)c).SlashDirection = 0;
+                ((Knight)c).Update(gameTime, panels);
             }
             else
             {
@@ -221,61 +218,7 @@ namespace CastlesAndCannonsMonoGame
             return c;
         }
 
-        // TODO: Possible moving to Knight and implement in Knight Update?
-        private void Slash()
-        {
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-            {
-                mouseClick.X = Mouse.GetState().X;
-                mouseClick.Y = Mouse.GetState().Y;
-                ((Knight)c).Slash(mouseClick);
-
-                if (CheckSlashDirection(((Knight)c).SlashDirection) && !c.IsMoving)
-                {
-                    switch (((Knight)c).SlashDirection)
-                    {
-                        case 1:
-                            ((Knight)c).SlashedPanel = panels[c.Row - 1, c.Column];
-                            break;
-                        case 2:
-                            ((Knight)c).SlashedPanel = panels[c.Row, c.Column + 1];
-                            break;
-                        case 3:
-                            ((Knight)c).SlashedPanel = panels[c.Row + 1, c.Column];
-                            break;
-                        case 4:
-                            ((Knight)c).SlashedPanel = panels[c.Row, c.Column - 1];
-                            break;
-                    }
-                    ((Knight)c).SlashedPanel.Slashed(true);
-                }
-            }
-        }
-
-        // TODO: Document
-        private bool CheckSlashDirection(int slashDirection)
-        {
-            switch (slashDirection)
-            {
-                case 1:
-                    if (c.Row - 1 < 0)
-                        return false;
-                    break;
-                case 2:
-                    if (c.Column + 1 > GRID_SIZE - 1)
-                        return false;
-                    break;
-                case 3:
-                    if (c.Row + 1 > GRID_SIZE - 1)
-                        return false;
-                    break;
-                case 4:
-                    if (c.Column - 1 < 0)
-                        return false;
-                    break;
-            }
-            return true;
-        }
+        
 
         // Spawns a single Cannonball.
         private void SpawnEnemies(GameTime gameTime)
