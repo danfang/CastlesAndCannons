@@ -89,15 +89,26 @@ namespace CastlesAndCannonsMonoGame
             spriteBatch.Draw(Textures.cannonTexture, bounds, Color.White);
         }
 
+        /*******************
+         * GET/SET METHODS *
+        *******************/
+
         // Returns the Rectangle representing the bounds of the Cannonball.
-        public Rectangle Bounds()
+        public Rectangle Bounds
         {
-            return bounds;
+            get
+            {
+                return bounds;
+            }
         }
 
-        public Rectangle ActualBounds()
+        // Returns the Rectangle representing the collision bounds of the Cannonball.
+        public Rectangle ActualBounds
         {
-            return collisionBounds;
+            get 
+            {
+                return collisionBounds;
+            }
         }
 
         // Returns the amount of damage the Cannonball deals.

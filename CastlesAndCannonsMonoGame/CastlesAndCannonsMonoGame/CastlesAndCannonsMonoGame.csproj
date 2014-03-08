@@ -163,6 +163,7 @@
   <ItemGroup>
     <Content Include="Assets\CannonBall.png" />
     <Content Include="Assets\gameovertemp.png" />
+    <Content Include="Assets\Mana.png" />
     <Content Include="Assets\Health.png" />
     <Content Include="Assets\HealthBackground.png" />
     <Content Include="Assets\KnightSpriteRight.png" />

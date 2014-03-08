@@ -15,6 +15,7 @@ namespace CastlesAndCannonsMonoGame
         public static Texture2D[] knightTextures = new Texture2D[4];
         public static Texture2D cannonTexture;
         public static Texture2D healthTexture;
+        public static Texture2D manaTexture;
         public static Texture2D backgroundTexture;
         public static Texture2D gameOver;
 
@@ -27,6 +28,7 @@ namespace CastlesAndCannonsMonoGame
             knightTextures[3] = game.Content.Load<Texture2D>("KnightSpriteLeft");
             cannonTexture = game.Content.Load<Texture2D>("CannonBall");
             healthTexture = game.Content.Load<Texture2D>("Health");
+            manaTexture = game.Content.Load<Texture2D>("Mana");
             backgroundTexture = game.Content.Load<Texture2D>("HealthBackground");
             gameOver = game.Content.Load<Texture2D>("gameovertemp");
         }
