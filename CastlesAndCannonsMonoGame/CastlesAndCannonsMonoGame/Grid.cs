@@ -237,12 +237,12 @@ namespace CastlesAndCannonsMonoGame
                 {
                     selectedPattern = (Pattern)generator.Next(1, NUMBER_OF_PATTERNS + 1);
                 }
-                activatePattern();
+                ActivatePattern();
             }
         }
 
         // Performs one iteration of the currently selected Pattern.
-        private void activatePattern()
+        private void ActivatePattern()
         {
             Vector2 position = new Vector2();
             switch (selectedPattern)
@@ -264,12 +264,12 @@ namespace CastlesAndCannonsMonoGame
                     }
                 case Pattern.COMPLETELY_RANDOM:
                     {
-                        CompletelyRandom(position);
+                        ActivateCompletelyRandom(position);
                         break;
                     }
                 case Pattern.TARGET_SHOT:
                     {
-                        TargetShot(position);
+                        ActivateTargetShot(position);
                         break;
                     }
             }
@@ -353,7 +353,7 @@ namespace CastlesAndCannonsMonoGame
         // Activates one iteration of the Completely Random pattern. The Random pattern fires
         // at random from any direction and from any Panel. After the pattern has fired GRID_SIZE
         // Cannonballs, the pattern deselects itself.
-        private void CompletelyRandom(Vector2 position)
+        private void ActivateCompletelyRandom(Vector2 position)
         {
             Cannonball.Direction direction = (Cannonball.Direction)generator.Next(1, NUMBER_OF_PATTERNS + 1);
             int index = generator.Next(GRID_SIZE);
@@ -380,7 +380,7 @@ namespace CastlesAndCannonsMonoGame
             checkToDeselect();
         }
 
-        private void TargetShot(Vector2 position)
+        private void ActivateTargetShot(Vector2 position)
         {
             position = panels[c.Row, 0].GetPosition();
             position.X -= ENEMY_SPAWN_BUFFER;
