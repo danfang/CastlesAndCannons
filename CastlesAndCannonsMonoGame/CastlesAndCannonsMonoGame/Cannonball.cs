@@ -50,6 +50,7 @@ namespace CastlesAndCannonsMonoGame
             bounds = new Rectangle((int)position.X, (int)position.Y, Grid.PANEL_SIZE, Grid.PANEL_SIZE);
             float dividingConstant = (float) (3 / (Math.Sqrt(2)));
             collisionBounds = new Rectangle((int)position.X, (int)position.Y, (int) (Grid.PANEL_SIZE / dividingConstant), (int) (Grid.PANEL_SIZE / dividingConstant));
+            collisionBounds.Offset(new Point(500, 500));
             switch (d) // Direction
             {
                 case Direction.UP: // up
@@ -77,8 +78,8 @@ namespace CastlesAndCannonsMonoGame
                 pos.Y += velocity.Y; 
                 bounds.X = (int) pos.X;
                 bounds.Y = (int) pos.Y;
-                collisionBounds.X = (int)pos.X;
-                collisionBounds.Y = (int)pos.Y;
+                collisionBounds.X = (int)(pos.X);
+                collisionBounds.Y = (int)(pos.Y);
             }
 
         }
@@ -87,6 +88,7 @@ namespace CastlesAndCannonsMonoGame
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {   
             spriteBatch.Draw(Textures.cannonTexture, bounds, Color.White);
+            spriteBatch.Draw(Textures.cannonTexture, collisionBounds, Color.White);
         }
 
         // Returns the Rectangle representing the bounds of the Cannonball.

@@ -230,7 +230,7 @@ namespace CastlesAndCannonsMonoGame
             float timer = enemySpawnTimer - elapsedGameTime;
             if (timer < 0)
             {
-                if (selectedPattern == Pattern.NOT_SELECTED)
+                if (selectedPattern == Pattern.NOT_SELECTED) {
                     selectedPattern = (Pattern)generator.Next(1, NUMBER_OF_PATTERNS + 1);
                 }
                 ActivatePattern();
@@ -281,7 +281,7 @@ namespace CastlesAndCannonsMonoGame
             position = panels[0, patternCount].GetPosition();
             position.Y -= ENEMY_SPAWN_BUFFER;
             enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, 10));
-            checkToDeselect();
+            CheckToDeselect();
         }
 
         // Activates one iteration in the Cascading Up pattern. The Pattern resembles
@@ -293,7 +293,7 @@ namespace CastlesAndCannonsMonoGame
             position = panels[GRID_SIZE - 1, patternCount].GetPosition();
             position.Y += ENEMY_SPAWN_BUFFER;
             enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, 10));
-            checkToDeselect();
+            CheckToDeselect();
         }
 
 
@@ -351,7 +351,7 @@ namespace CastlesAndCannonsMonoGame
         // Cannonballs, the pattern deselects itself.
         private void ActivateCompletelyRandom(Vector2 position)
         {
-            Cannonball.Direction direction = (Cannonball.Direction)generator.Next(1, NUMBER_OF_PATTERNS + 1);
+            Cannonball.Direction direction = (Cannonball.Direction)generator.Next(1, 5);
             int index = generator.Next(GRID_SIZE);
             switch (direction)
             {
@@ -373,30 +373,30 @@ namespace CastlesAndCannonsMonoGame
                     break;
             }
             enemies.AddLast(new Cannonball(direction, position, 10));
-            checkToDeselect();
+            CheckToDeselect();
         }
 
         private void ActivateTargetShot(Vector2 position)
         {
             position = panels[c.Row, 0].GetPosition();
             position.X -= ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.RIGHT, position, 15));
+            enemies.AddLast(new Cannonball(Cannonball.Direction.RIGHT, position, 12));
             position = panels[c.Row, GRID_SIZE - 1].GetPosition();
             position.X += ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.LEFT, position, 15));
+            enemies.AddLast(new Cannonball(Cannonball.Direction.LEFT, position, 12));
             position = panels[GRID_SIZE - 1, c.Column].GetPosition();
             position.Y += ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, 15));
+            enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, 12));
             position = panels[0, c.Column].GetPosition();
             position.Y -= ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, 15));
+            enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, 12));
             selectedPattern = Pattern.NOT_SELECTED;
             patternCount = 0;
         }
 
         // Performs a check if the Pattern needs to be deselected. If the Pattern has fired
         // GRID_SIZE Cannonballs, it will deselect itself.
-        private void checkToDeselect()
+        private void CheckToDeselect()
         {
             patternCount++;
             if (patternCount == Grid.GRID_SIZE)
