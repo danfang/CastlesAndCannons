@@ -18,6 +18,10 @@ namespace CastlesAndCannonsMonoGame
         private Panel slashedPanel;
         private float mouseAngle;
         private Func<float, float, float> GetAngle;
+        private const int SLASH_RELOAD = 50;
+        private const int SLASH_COST = 50;
+        private int slashStamina;
+        private Rectangle reloadBar;
 
         public enum SlashDirections
         {
@@ -29,25 +33,44 @@ namespace CastlesAndCannonsMonoGame
            : base(pos, newSize, row, col)
         {
             GetAngle = (x, y) => (float) Math.Atan2(y, x);
+            reloadBar = new Rectangle(200, 20, SLASH_RELOAD, 20);
+            slashStamina = SLASH_RELOAD;
         }
 
         public override void Update(GameTime gameTime, Panel[,] grid)
         {
             base.MoveCharacter(grid);
-            SlashedPanel = null;
+
+            if (slashStamina < SLASH_RELOAD)
+                slashStamina+=2;
+
+            if (SlashedPanel != null)
+            {
+                if (SlashedPanel.Slashed && isMoving)
+                {
+                    SlashedPanel.Slashed = false;
+                    SlashedPanel = null;
+                }
+                else if (!SlashedPanel.Slashed)
+                    SlashedPanel = null;
+            }
+
             SlashDirection = 0;
+
             Slash(grid);
+            reloadBar.Width = slashStamina * 2;
         }
         
         // Draws the knight sprite.
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Textures.knightTextures[direction], bounds, Color.White);
+            spriteBatch.Draw(Textures.healthTexture, reloadBar, Color.Purple);
         }
 
         // Calculates the slash direction based on a given mouse click (one of four
         // directions) relative to the knight.
-        public void Slash(Point mouseClick)
+        private void SetSlashDirection(Point mouseClick)
         {
             mouseAngle = GetAngle(mouseClick.X - position.X, position.Y - mouseClick.Y) * 180 / (float) Math.PI;
             if (mouseAngle > 45 && mouseAngle < 135)
@@ -74,9 +97,10 @@ namespace CastlesAndCannonsMonoGame
         // Sets the pointer to the desired slashed panel.
         private void Slash(Panel[,] panels)
         {
-            if (Grid.mouseClicked)
+            if (Grid.mouseClicked && (slashStamina - SLASH_COST >= 0))
             {
-                Slash(Grid.mouseClick);
+                slashStamina -= SLASH_COST;
+                SetSlashDirection(Grid.mouseClick);
 
                 if (CheckSlashDirection(SlashDirection) && !IsMoving)
                 {
