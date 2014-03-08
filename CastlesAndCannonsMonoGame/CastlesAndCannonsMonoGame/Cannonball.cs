@@ -28,7 +28,6 @@ namespace CastlesAndCannonsMonoGame
             DOWN = 4
         }
 
-        public static float speed = 10;
         private int damage;
         private int armor;
         private int health;
@@ -41,7 +40,7 @@ namespace CastlesAndCannonsMonoGame
         // Constructs a new Cannonball. Direction d represents the direction
         // the Cannonball is going to be going and the Vector2, position, represents
         // the initial position the Cannonball is going to be in.
-        public Cannonball(Direction d, Vector2 position)
+        public Cannonball(Direction d, Vector2 position, float speed)
         {
             damage = 20; // regular cannonball damage
             armor = 30;
