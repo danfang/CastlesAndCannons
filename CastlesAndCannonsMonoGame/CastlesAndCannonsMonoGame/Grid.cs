@@ -24,30 +24,24 @@ namespace CastlesAndCannonsMonoGame
         public static int GRID_HEIGHT_OFFSET;
         public static int ENEMY_SPAWN_BUFFER;
         public static float elapsedGameTime;
-        public static bool mouseClicked;
-        public static Point mouseClick;
+        public static bool leftMouseClicked;
+        public static bool rightMouseClicked;
+        public static Point leftMouseClick;
+
         private const int NUMBER_OF_PATTERNS = 5;
-        private Panel[,] panels;
         private int score; // to be implemented
+        private int patternCount;
+        private float enemySpawnTimer; // 
+        private bool isGameOver;
+        private Panel[,] panels;
         private LinkedList<Cannonball> enemies;
         private Character c;
         private Point mousePosition;
-        private float enemySpawnTimer; // 
         private Random generator; // used to randomly generate enemies
         private Rectangle curHealthBar; // current health
         private Rectangle curManaBar;
         private Rectangle backgroundHealthBar; // background health
-        private bool isGameOver;
         private Pattern selectedPattern; // -1 if not selected
-        private int patternCount;
-
-        // Creates a new instance of Grid. Puts the Character in the Grid at row 2
-        // column 2.
-        public Grid()
-        {
-            Initialize();
-            LoadContent();
-        }
 
         public enum Pattern
         {
@@ -57,6 +51,14 @@ namespace CastlesAndCannonsMonoGame
             THREE_SHOT = 3,
             COMPLETELY_RANDOM = 4,
             TARGET_SHOT = 5
+        }
+
+        // Creates a new instance of Grid. Puts the Character in the Grid at row 2
+        // column 2.
+        public Grid()
+        {
+            Initialize();
+            LoadContent();
         }
 
         // Defines the constants and objects of Grid.
@@ -99,18 +101,7 @@ namespace CastlesAndCannonsMonoGame
         // moves the character if there is movement.
         public void Update(GameTime gameTime)
         {
-            mousePosition.X = Mouse.GetState().X;
-            mousePosition.Y = Mouse.GetState().Y;
-
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-            {
-                mouseClicked = true;
-                mouseClick.X = mousePosition.X;
-                mouseClick.Y = mousePosition.Y;
-            }
-            else
-                mouseClicked = false;
-
+            UpdateMouseClicks();
             if (!isGameOver)
             {
                 backgroundHealthBar = new Rectangle(50, 20, 100, 20);
@@ -127,7 +118,7 @@ namespace CastlesAndCannonsMonoGame
             }
             else
                 UnloadContent();
-            }
+        }
 
         // Updates all of the cannonballs and if a collision occurs, removes
         // the CannonBall all together and interacts with the enemy player
@@ -164,7 +155,10 @@ namespace CastlesAndCannonsMonoGame
             {
                 Cannonball collide = collided.Dequeue();
                 enemies.Remove(collide);
-                c.Health -= collide.Damage;
+                if (c.GetType().Equals(typeof(Knight)) && ((Knight)c).Shielded)
+                    c.Health -= collide.Damage / 3;
+                else 
+                    c.Health -= collide.Damage;
                 System.Diagnostics.Debug.WriteLine(c.Health);
                 if (c.Health == 0) // Character is dead
                 {
@@ -395,6 +389,26 @@ namespace CastlesAndCannonsMonoGame
                 selectedPattern = Pattern.NOT_SELECTED; // deselect
                 patternCount = 0;
             }
+        }
+
+        private void UpdateMouseClicks()
+        {
+            mousePosition.X = Mouse.GetState().X;
+            mousePosition.Y = Mouse.GetState().Y;
+
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                leftMouseClicked = true;
+                leftMouseClick.X = mousePosition.X;
+                leftMouseClick.Y = mousePosition.Y;
+            }
+            else
+                leftMouseClicked = false;
+
+            if (Mouse.GetState().RightButton == ButtonState.Pressed)
+                rightMouseClicked = true;
+            else
+                rightMouseClicked = false;
         }
 
         /*******************

@@ -14,18 +14,33 @@ namespace CastlesAndCannonsMonoGame
 {
     class Knight : Character
     {
-        private int slashDirection; // 0 = no slash, 1 is top (goes clockwise)
-        private Panel slashedPanel;
-        private float mouseAngle;
-        private Func<float, float, float> GetAngle;
-        private const int SLASH_RELOAD = 50;
         private const int SLASH_COST = 50;
+        private const int SHIELD_COST = 50;
+        private int slashDirection; // 0 = no slash, 1 is top (goes clockwise)
         private int slashStamina;
+        private int shieldStamina;
+        private float mouseAngle;
+        private bool isShielded;
+        private Panel slashedPanel;
+        private Func<float, float, float> GetAngle;
         private Rectangle reloadBar;
+        private Rectangle shieldBar;
+        private Dictionary<Controls, Skills> controllerDict;
 
         public enum SlashDirections
         {
             UP, RIGHT, LEFT, DOWN
+        }
+
+        public enum Controls
+        {
+            RIGHT_MOUSE,
+            LEFT_MOUSE
+        }
+
+        public enum Skills
+        {
+            SLASH, SHIELD, TELEPORT
         }
 
         //
@@ -33,39 +48,34 @@ namespace CastlesAndCannonsMonoGame
            : base(pos, newSize, row, col)
         {
             GetAngle = (x, y) => (float) Math.Atan2(y, x);
-            reloadBar = new Rectangle(200, 20, SLASH_RELOAD, 20);
-            slashStamina = SLASH_RELOAD;
+            reloadBar = new Rectangle(200, 20, SLASH_COST * 2, 20);
+            shieldBar = new Rectangle(200, 50, SHIELD_COST * 2, 20);
+            slashStamina = SLASH_COST;
+            shieldStamina = SHIELD_COST;
+            controllerDict = new Dictionary<Controls, Skills>();
+            controllerDict.Add(Controls.LEFT_MOUSE, Skills.SLASH);
+            controllerDict.Add(Controls.RIGHT_MOUSE, Skills.SHIELD);
         }
 
         public override void Update(GameTime gameTime, Panel[,] grid)
         {
             base.MoveCharacter(grid);
+            foreach (KeyValuePair<Controls, Skills> pair in controllerDict) 
+                Action(pair.Value, grid, pair.Key);
 
-            if (slashStamina < SLASH_RELOAD)
-                slashStamina+=2;
-
-            if (SlashedPanel != null)
-            {
-                if (SlashedPanel.Slashed && isMoving)
-                {
-                    SlashedPanel.Slashed = false;
-                    SlashedPanel = null;
-                }
-                else if (!SlashedPanel.Slashed)
-                    SlashedPanel = null;
-            }
-
-            SlashDirection = 0;
-
-            Slash(grid);
             reloadBar.Width = slashStamina * 2;
+            shieldBar.Width = shieldStamina * 2;
         }
         
         // Draws the knight sprite.
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Textures.knightTextures[direction], bounds, Color.White);
+            if(!isShielded)
+                spriteBatch.Draw(Textures.knightTextures[direction], bounds, Color.White);
+            else
+                spriteBatch.Draw(Textures.knightTextures[direction], bounds, Color.Blue);
             spriteBatch.Draw(Textures.healthTexture, reloadBar, Color.Purple);
+            spriteBatch.Draw(Textures.healthTexture, shieldBar, Color.Maroon);
         }
 
         // Calculates the slash direction based on a given mouse click (one of four
@@ -95,12 +105,27 @@ namespace CastlesAndCannonsMonoGame
         }
 
         // Sets the pointer to the desired slashed panel.
-        private void Slash(Panel[,] panels)
+        private void Slash(Panel[,] panels, Controls control)
         {
-            if (Grid.mouseClicked && (slashStamina - SLASH_COST >= 0))
+            SlashDirection = 0;
+            if (slashStamina < SLASH_COST)
+                slashStamina += 2;
+
+            if (SlashedPanel != null)
+            {
+                if (SlashedPanel.Slashed && isMoving)
+                {
+                    SlashedPanel.Slashed = false;
+                    SlashedPanel = null;
+                }
+                else if (!SlashedPanel.Slashed)
+                    SlashedPanel = null;
+            }
+
+            if (Grid.leftMouseClicked && (slashStamina - SLASH_COST >= 0))
             {
                 slashStamina -= SLASH_COST;
-                SetSlashDirection(Grid.mouseClick);
+                SetSlashDirection(Grid.leftMouseClick);
 
                 if (CheckSlashDirection(SlashDirection) && !IsMoving)
                 {
@@ -150,6 +175,33 @@ namespace CastlesAndCannonsMonoGame
             return true;
         }
 
+        private void Shield(Controls control)
+        {
+            if (!isShielded && shieldStamina < SHIELD_COST)
+                shieldStamina += 2;
+
+            if (shieldStamina <= 0)
+                isShielded = false;
+            
+            if (Grid.rightMouseClicked && shieldStamina > 0)
+            {
+                isShielded = true;
+                shieldStamina-=3;
+            }
+            else
+                isShielded = false;
+            
+        }
+
+        private void Action(Skills skill, Panel[,] grid, Controls control)
+        {
+            if (skill == Skills.SLASH)
+                Slash(grid, control);
+            else if (skill == Skills.SHIELD)
+                Shield(control);
+            else if (skill == Skills.TELEPORT) { }
+        }
+
         /*******************
         * GET/SET METHODS *
         *******************/
@@ -178,5 +230,12 @@ namespace CastlesAndCannonsMonoGame
             }
         }
 
+        public bool Shielded
+        {
+            get
+            {
+                return isShielded;
+            }
+        }
     }
 }
