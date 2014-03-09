@@ -272,7 +272,7 @@ namespace CastlesAndCannonsMonoGame
         {
             position = panels[0, patternCount].Position;
             position.Y -= ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, 10));
+            enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, CalculateSpeedFactor()));
             CheckToDeselect();
         }
 
@@ -284,7 +284,7 @@ namespace CastlesAndCannonsMonoGame
         {
             position = panels[GRID_SIZE - 1, patternCount].Position;
             position.Y += ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, 10));
+            enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, CalculateSpeedFactor()));
             CheckToDeselect();
         }
 
@@ -300,7 +300,7 @@ namespace CastlesAndCannonsMonoGame
                 {
                     position = panels[i * 2, 0].Position;
                     position.X -= ENEMY_SPAWN_BUFFER;
-                    enemies.AddLast(new Cannonball(Cannonball.Direction.RIGHT, position, 10));
+                    enemies.AddLast(new Cannonball(Cannonball.Direction.RIGHT, position, CalculateSpeedFactor()));
                 }
                 patternCount++;
             }
@@ -310,7 +310,7 @@ namespace CastlesAndCannonsMonoGame
                 {
                     position = panels[i * 2 + 1, GRID_SIZE - 1].Position;
                     position.X += ENEMY_SPAWN_BUFFER;
-                    enemies.AddLast(new Cannonball(Cannonball.Direction.LEFT, position, 10));
+                    enemies.AddLast(new Cannonball(Cannonball.Direction.LEFT, position, CalculateSpeedFactor()));
                 }
                 patternCount++;
             }
@@ -320,7 +320,7 @@ namespace CastlesAndCannonsMonoGame
                 {
                     position = panels[GRID_SIZE - 1, i * 2 + 1].Position;
                     position.Y += ENEMY_SPAWN_BUFFER;
-                    enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, 10));
+                    enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, CalculateSpeedFactor()));
                 }
                 patternCount++;
             }
@@ -330,7 +330,7 @@ namespace CastlesAndCannonsMonoGame
                 {
                     position = panels[0, i * 2].Position;
                     position.Y -= ENEMY_SPAWN_BUFFER;
-                    enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, 10));
+                    enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, CalculateSpeedFactor()));
                 }
                 selectedPattern = Pattern.NOT_SELECTED;
                 patternCount = 0;
@@ -363,26 +363,33 @@ namespace CastlesAndCannonsMonoGame
                     position.X += ENEMY_SPAWN_BUFFER;
                     break;
             }
-            enemies.AddLast(new Cannonball(direction, position, 10));
+            enemies.AddLast(new Cannonball(direction, position, CalculateSpeedFactor()));
             CheckToDeselect();
         }
 
         private void ActivateTargetShot(Vector2 position)
         {
-            position = panels[c.Row, 0].Position;
-            position.X -= ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.RIGHT, position, 12));
-            position = panels[c.Row, GRID_SIZE - 1].Position;
-            position.X += ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.LEFT, position, 12));
-            position = panels[GRID_SIZE - 1, c.Column].Position;
-            position.Y += ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, 12));
-            position = panels[0, c.Column].Position;
-            position.Y -= ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, 12));
-            selectedPattern = Pattern.NOT_SELECTED;
-            patternCount = 0;
+            if (patternCount == 5)
+            {
+                position = panels[c.Row, 0].Position;
+                position.X -= ENEMY_SPAWN_BUFFER;
+                enemies.AddLast(new Cannonball(Cannonball.Direction.RIGHT, position, 3 + CalculateSpeedFactor()));
+                position = panels[c.Row, GRID_SIZE - 1].Position;
+                position.X += ENEMY_SPAWN_BUFFER;
+                enemies.AddLast(new Cannonball(Cannonball.Direction.LEFT, position, 3 + CalculateSpeedFactor()));
+                position = panels[GRID_SIZE - 1, c.Column].Position;
+                position.Y += ENEMY_SPAWN_BUFFER;
+                enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, 3 + CalculateSpeedFactor()));
+                position = panels[0, c.Column].Position;
+                position.Y -= ENEMY_SPAWN_BUFFER;
+                enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, 3 + CalculateSpeedFactor()));
+                selectedPattern = Pattern.NOT_SELECTED;
+                patternCount = 0;
+            }
+            else
+            {
+                patternCount++;
+            }
         }
 
         // Performs a check if the Pattern needs to be deselected. If the Pattern has fired
@@ -395,6 +402,13 @@ namespace CastlesAndCannonsMonoGame
                 selectedPattern = Pattern.NOT_SELECTED; // deselect
                 patternCount = 0;
             }
+        }
+
+        // Calcualtes the speed for the Cannonball based on the elapsed time.
+        private float CalculateSpeedFactor()
+        {
+            float speed = (float)((80 * Math.Exp(.0000000005) * elapsedGameTime / 60) / (30 + 8 * Math.Exp(.0000000005) * (elapsedGameTime / 60))) + 10;
+            return speed;
         }
 
         /*******************
@@ -417,5 +431,6 @@ namespace CastlesAndCannonsMonoGame
                 curManaBar.Width = value;
             }
         }
+
     }
 }
