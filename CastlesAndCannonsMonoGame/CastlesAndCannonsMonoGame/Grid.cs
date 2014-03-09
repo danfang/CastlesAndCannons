@@ -398,6 +398,12 @@ namespace CastlesAndCannonsMonoGame
             }
         }
 
+        private float CalculateSpeedFactor()
+        {
+            float speed = (float)((80 * Math.Exp(.0000000005) * elapsedGameTime / 60) / (30 + 8 * Math.Exp(0000000005) * (elapsedGameTime / 60))) + 10;
+            return speed;
+        }
+
         private void UpdateMouseClicks()
         {
             mousePosition.X = Mouse.GetState().X;
