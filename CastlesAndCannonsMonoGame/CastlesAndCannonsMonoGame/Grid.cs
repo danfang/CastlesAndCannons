@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -36,7 +37,7 @@ namespace CastlesAndCannonsMonoGame
         private Random generator; // used to randomly generate enemies
         private Rectangle curHealthBar; // current health
         private Rectangle backgroundHealthBar; // background health
-        private Boolean isGameOver;
+        private bool isGameOver;
         private Pattern selectedPattern; // -1 if not selected
         private int patternCount;
 
@@ -114,6 +115,10 @@ namespace CastlesAndCannonsMonoGame
                 Slash();
                 UpdateCannonballs(gameTime);
                 c.Update(gameTime, panels);
+                if (c.Health <= 0)
+                {
+                    isGameOver = true;
+                }
                 if (c.GetType().Equals("Knight"))
                 {
                     ((Knight)c).SlashedPanel = null;
@@ -216,8 +221,8 @@ namespace CastlesAndCannonsMonoGame
             }
             else // game is over
             {
-                GameOverScreen g = new GameOverScreen();
-                g.Draw(gameTime, spriteBatch);
+                //GameOverScreen g = new GameOverScreen();
+                //g.Draw(gameTime, spriteBatch);
             }
         }
 
@@ -442,6 +447,18 @@ namespace CastlesAndCannonsMonoGame
             {
                 selectedPattern = Pattern.NOT_SELECTED; // deselect
                 patternCount = 0;
+            }
+        }
+
+        public bool IsGameOver
+        {
+            get
+            {
+                return isGameOver;
+            }
+            set
+            {
+                isGameOver = value;
             }
         }
 

@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -29,7 +32,6 @@ namespace CastlesAndCannonsMonoGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Assets";
-
         }
 
         /// <summary>
@@ -85,6 +87,10 @@ namespace CastlesAndCannonsMonoGame
             g.Update(gameTime);
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                 App.Current.Exit();
+            if (g.IsGameOver)
+            {
+                
+            }
         }
 
         /// <summary>
