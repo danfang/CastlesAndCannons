@@ -61,7 +61,7 @@ namespace CastlesAndCannonsMonoGame
         public void MoveCharacter(Panel[, ] panels)
         {
             Keys[] pressed = Keyboard.GetState().GetPressedKeys();
-            if (pressed.Length == 0 && !canPressKey)
+            if (pressed.Length == 0)
             {
                 canPressKey = true;
             }
