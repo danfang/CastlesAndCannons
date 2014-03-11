@@ -87,10 +87,6 @@ namespace CastlesAndCannonsMonoGame
             g.Update(gameTime);
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                 App.Current.Exit();
-            if (g.IsGameOver)
-            {
-                
-            }
         }
 
         /// <summary>

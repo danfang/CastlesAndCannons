@@ -28,7 +28,6 @@ namespace CastlesAndCannonsMonoGame
             DOWN = 4
         }
 
-        public static float speed = 10;
         private int damage;
         private int armor;
         private int health;
@@ -37,11 +36,12 @@ namespace CastlesAndCannonsMonoGame
         private Vector2 pos;
         private Rectangle bounds; // used for drawing the actual CannonBall
         private Rectangle collisionBounds; // used for collisions
+        private float ADJUSTMENT_CONSTANT = (float)(3 / (Math.Sqrt(2))); // adjusts bounds for the circle
         
         // Constructs a new Cannonball. Direction d represents the direction
         // the Cannonball is going to be going and the Vector2, position, represents
         // the initial position the Cannonball is going to be in.
-        public Cannonball(Direction d, Vector2 position)
+        public Cannonball(Direction d, Vector2 position, float speed)
         {
             damage = 20; // regular cannonball damage
             armor = 30;
@@ -50,7 +50,9 @@ namespace CastlesAndCannonsMonoGame
             pos = position;
             bounds = new Rectangle((int)position.X, (int)position.Y, Grid.PANEL_SIZE, Grid.PANEL_SIZE);
             float dividingConstant = (float) (3 / (Math.Sqrt(2)));
-            collisionBounds = new Rectangle((int)position.X, (int)position.Y, (int) (Grid.PANEL_SIZE / dividingConstant), (int) (Grid.PANEL_SIZE / dividingConstant));
+            collisionBounds = new Rectangle((int)position.X, (int)position.Y, (int)(Grid.PANEL_SIZE / ADJUSTMENT_CONSTANT), (int)(Grid.PANEL_SIZE / ADJUSTMENT_CONSTANT));
+            collisionBounds.Offset(Grid.PANEL_SIZE / 2, Grid.PANEL_SIZE / 2);
+            collisionBounds.Offset(-(int)(Grid.PANEL_SIZE / ADJUSTMENT_CONSTANT), -(int)(Grid.PANEL_SIZE / ADJUSTMENT_CONSTANT));
             switch (d) // Direction
             {
                 case Direction.UP: // up
@@ -78,8 +80,10 @@ namespace CastlesAndCannonsMonoGame
                 pos.Y += velocity.Y; 
                 bounds.X = (int) pos.X;
                 bounds.Y = (int) pos.Y;
-                collisionBounds.X = (int)pos.X;
-                collisionBounds.Y = (int)pos.Y;
+                collisionBounds.X = (int)(pos.X);
+                collisionBounds.Y = (int)(pos.Y);
+                collisionBounds.Offset(Grid.PANEL_SIZE / 2, Grid.PANEL_SIZE / 2);
+                collisionBounds.Offset(-(int)(Grid.PANEL_SIZE / 2 / ADJUSTMENT_CONSTANT), -(int)(Grid.PANEL_SIZE / 2 / ADJUSTMENT_CONSTANT));
             }
 
         }
@@ -90,15 +94,26 @@ namespace CastlesAndCannonsMonoGame
             spriteBatch.Draw(Textures.cannonTexture, bounds, Color.White);
         }
 
+        /*******************
+         * GET/SET METHODS *
+        *******************/
+
         // Returns the Rectangle representing the bounds of the Cannonball.
-        public Rectangle Bounds()
+        public Rectangle Bounds
         {
-            return bounds;
+            get
+            {
+                return bounds;
+            }
         }
 
-        public Rectangle ActualBounds()
+        // Returns the Rectangle representing the collision bounds of the Cannonball.
+        public Rectangle ActualBounds
         {
-            return collisionBounds;
+            get 
+            {
+                return collisionBounds;
+            }
         }
 
         // Returns the amount of damage the Cannonball deals.

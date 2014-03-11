@@ -22,6 +22,7 @@ namespace CastlesAndCannonsMonoGame
         protected int row;
         protected int column;
         protected Rectangle bounds;
+        protected Rectangle movingBounds;
         protected int size;
         protected bool isMoving;
         protected bool canPressKey;
@@ -39,6 +40,7 @@ namespace CastlesAndCannonsMonoGame
             this.row = row;
             this.column = col;
             bounds = new Rectangle((int)position.X, (int)position.Y, size, size);
+            movingBounds = new Rectangle((int)position.X + size/4, (int)position.Y + size/4, size / 2, size/ 2);
             isMoving = false;
             canPressKey = true;
         }
@@ -48,17 +50,15 @@ namespace CastlesAndCannonsMonoGame
             
         }
 
-        // Updates the Character, namely moving the Character. gameTime represents the
-        // current game time where as the Panel[, ], grid, represents the grid of Panels
-        // that is used to delegate the movements.
-        public void Update(GameTime gameTime, Panel[, ] grid)
-        {
-            MoveCharacter(grid);
-        }
+        // All characters must override this update method (movement, behavior)
+        public abstract void Update(GameTime gameTime, Panel[,] grid);
+
+        // All characters must override this draw method (spritebatch drawing)
+        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
         // Moves the Character based on the WASD keyboard movement
         // (W for up, A for left, S for down, and D for right)
-        private void MoveCharacter(Panel[, ] panels)
+        public void MoveCharacter(Panel[, ] panels)
         {
             Keys[] pressed = Keyboard.GetState().GetPressedKeys();
             if (pressed.Length == 0 && !canPressKey)
@@ -93,25 +93,21 @@ namespace CastlesAndCannonsMonoGame
                     if (row < Math.Sqrt(panels.Length) - 1)
                         tempRow = row + 1;
                 }
-                desiredPos = panels[tempRow, tempCol].GetPosition();
+                desiredPos = panels[tempRow, tempCol].Position;
                 column = tempCol;
                 row = tempRow;
                 canPressKey = false;
                 isMoving = true;
             }
-            Move(panels[tempRow, tempCol].GetPosition(), tempRow, tempCol);
+            Move(panels[tempRow, tempCol].Position, tempRow, tempCol);
         }
-
-
-
-        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
         // Moves the character depending on what direction the user presses
         // (WASD). Vector2, newPos, represents the new position that the user
         // user has after moving, int newRow represents the new row after the
         // user has moved. Int newCol represents the new column after the user
         // has moved.
-        public void Move(Vector2 newPos, int newRow, int newCol)
+        private void Move(Vector2 newPos, int newRow, int newCol)
         {
             if (isMoving)
             {
@@ -153,6 +149,8 @@ namespace CastlesAndCannonsMonoGame
                 //    //isMoving = true;
                 //}
             }
+            movingBounds.X = bounds.X + size / 4;
+            movingBounds.Y = bounds.Y + size / 4;
         }
 
         /*******************
@@ -246,22 +244,26 @@ namespace CastlesAndCannonsMonoGame
             }
         }
 
-        // Returns the position at which the Character is in.
-        public Vector2 GetVector()
+        public Vector2 Position
         {
-            return position;
+            get
+            {
+                return position;
+            }
+            set
+            {
+                position = value;
+            }
         }
 
-        // Sets the position vector of the Character.
-        public void SetVector(int x, int y)
+        public Rectangle Bounds
         {
-            position.X = x;
-            position.Y = y;
-        }
-
-        public Rectangle Bounds()
-        {
-            return bounds;
+            get
+            {
+                if (isMoving)
+                    return movingBounds;
+                return bounds;
+            }
         }
 
 

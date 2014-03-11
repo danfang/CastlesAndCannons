@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,29 +24,24 @@ namespace CastlesAndCannonsMonoGame
         public static int GRID_HEIGHT_OFFSET;
         public static int ENEMY_SPAWN_BUFFER;
         public static float elapsedGameTime;
-        private const int NUMBER_OF_PATTERNS = 4;
-        private Panel[,] panels;
+        public static bool leftMouseClicked;
+        public static bool rightMouseClicked;
+        public static Point leftMouseClick;
+
+        private const int NUMBER_OF_PATTERNS = 5;
         private int score; // to be implemented
+        private int patternCount;
+        private float enemySpawnTimer; // 
+        private bool isGameOver;
+        private Panel[,] panels;
         private LinkedList<Cannonball> enemies;
         private Character c;
         private Point mousePosition;
-        private Point mouseClick;
-        private float enemySpawnRate; // enemies per second
-        private float enemySpawnTimer; // 
         private Random generator; // used to randomly generate enemies
         private Rectangle curHealthBar; // current health
+        private Rectangle curManaBar;
         private Rectangle backgroundHealthBar; // background health
-        private bool isGameOver;
         private Pattern selectedPattern; // -1 if not selected
-        private int patternCount;
-
-        // Creates a new instance of Grid. Puts the Character in the Grid at row 2
-        // column 2.
-        public Grid()
-        {
-            Initialize();
-            LoadContent();
-        }
 
         public enum Pattern
         {
@@ -55,7 +49,16 @@ namespace CastlesAndCannonsMonoGame
             CASCADE_DOWN = 1,
             CASCADE_UP = 2,
             THREE_SHOT = 3,
-            COMPLETELY_RANDOM = 4
+            COMPLETELY_RANDOM = 4,
+            TARGET_SHOT = 5
+        }
+
+        // Creates a new instance of Grid. Puts the Character in the Grid at row 2
+        // column 2.
+        public Grid()
+        {
+            Initialize();
+            LoadContent();
         }
 
         // Defines the constants and objects of Grid.
@@ -69,12 +72,13 @@ namespace CastlesAndCannonsMonoGame
             GRID_HEIGHT_OFFSET = (Game1.height - (PANEL_SIZE * GRID_SIZE)) / 2;
             ENEMY_SPAWN_BUFFER = PANEL_SIZE * 3;
             elapsedGameTime = 0;
-            enemySpawnRate = .5f;
             isGameOver = false;
             generator = new Random();
             selectedPattern = Pattern.NOT_SELECTED;
             enemySpawnTimer = 1f;
             patternCount = 0;
+            curHealthBar = new Rectangle(50, 20, 100, 20);
+            curManaBar = new Rectangle(50, 70, 100, 20);
         }
 
         // Creates the actual Grid and puts the Character in the Grid.
@@ -83,12 +87,10 @@ namespace CastlesAndCannonsMonoGame
             for (int row = 0; row < GRID_SIZE; row++)
             {
                 for (int col = 0; col < GRID_SIZE; col++)
-                {
                     panels[row, col] = new Panel(GRID_HEIGHT_OFFSET + row * PANEL_SIZE, GRID_WIDTH_OFFSET + col * PANEL_SIZE, PANEL_SIZE);
                 }
+            c = new Knight(panels[2, 2].Position, PANEL_SIZE, 2, 2);
             }
-            c = new Knight(panels[2, 2].GetPosition(), PANEL_SIZE, 2, 2);
-        }
 
         public void UnloadContent()
         {
@@ -99,37 +101,24 @@ namespace CastlesAndCannonsMonoGame
         // moves the character if there is movement.
         public void Update(GameTime gameTime)
         {
+            UpdateMouseClicks();
             if (!isGameOver)
             {
                 backgroundHealthBar = new Rectangle(50, 20, 100, 20);
-                mousePosition.X = Mouse.GetState().X;
-                mousePosition.Y = Mouse.GetState().Y;
 
                 elapsedGameTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 foreach (Panel p in panels)
                 {
                     p.Update(gameTime, mousePosition);
-                    p.Slashed(false);
                 }
                 SpawnEnemies(gameTime);
-                Slash();
                 UpdateCannonballs(gameTime);
-                c.Update(gameTime, panels);
-                if (c.Health <= 0)
-                {
-                    isGameOver = true;
-                }
-                if (c.GetType().Equals("Knight"))
-                {
-                    ((Knight)c).SlashedPanel = null;
-                    ((Knight)c).SlashDirection = 0;
-                }
+                if (c.GetType().Equals(typeof(Knight)))
+                ((Knight)c).Update(gameTime, panels);
             }
             else
-            {
                 UnloadContent();
             }
-        }
 
         // Updates all of the cannonballs and if a collision occurs, removes
         // the CannonBall all together and interacts with the enemy player
@@ -142,28 +131,21 @@ namespace CastlesAndCannonsMonoGame
             foreach (Cannonball cannonball in enemies)
             {
                 cannonball.Update(gameTime);
-                if (cannonball.ActualBounds().Intersects(c.Bounds()))
-                {
+
+                if (cannonball.ActualBounds.Intersects(c.Bounds))
                     toDestroy.Enqueue(cannonball);
-                }
-                if (c.GetType().Equals("Knight"))
-                {
-                    if (((Knight)c).SlashedPanel != null &&
-                        (cannonball.Bounds().Intersects(((Knight)c).SlashedPanel.GetBounds())))
-                    {
-                        toRemove.Enqueue(cannonball);
-                        Game1.scoreDisplay.Score += 900;
-                    }
-                }
-                if (cannonball.Bounds().X > Game1.width || cannonball.Bounds().Y > Game1.height + (PANEL_SIZE * 4)
-                    || cannonball.Bounds().X < -(PANEL_SIZE * 3) || cannonball.Bounds().Y < -(PANEL_SIZE * 3))
-                {
+
+                if (c.GetType().Equals(typeof(Knight)))
+                    ((Knight)c).removeCannonBall(cannonball, toRemove);
+
+                if (cannonball.Bounds.X > Game1.width || cannonball.Bounds.Y > Game1.height + (PANEL_SIZE * 4)
+                    || cannonball.Bounds.X < -(PANEL_SIZE * 3) || cannonball.Bounds.Y < -(PANEL_SIZE * 3))
                     toRemove.Enqueue(cannonball);
-                }
             }
             DestroyCannonballs(toDestroy);
             RemoveCannonballs(toRemove);
-            UpdateHealthBar();
+            HealthBar = c.Health;
+            ManaBar = c.Mana;
         }
 
         // Destroys the Cannonball if the Cannonball hits the user.
@@ -173,6 +155,9 @@ namespace CastlesAndCannonsMonoGame
             {
                 Cannonball collide = collided.Dequeue();
                 enemies.Remove(collide);
+                if (c.GetType().Equals(typeof(Knight)) && ((Knight)c).Shielded)
+                    c.Health -= collide.Damage / 3;
+                else 
                 c.Health -= collide.Damage;
                 System.Diagnostics.Debug.WriteLine(c.Health);
                 if (c.Health == 0) // Character is dead
@@ -195,34 +180,27 @@ namespace CastlesAndCannonsMonoGame
             }
         }
 
-        // Updates the health bar with the new character health if it changed.
-        private void UpdateHealthBar()
-        {
-            curHealthBar = new Rectangle(50, 20, c.Health, 20);
-        }
 
-        // Draws the Grid, Cannonballs, and Knight
+        // Draws the Grid, Cannonballs, Knight, and health/mana bars.
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (!isGameOver)
             {
                 foreach (Panel p in panels)
-                {
                     p.Draw(gameTime, spriteBatch);
-                }
 
                 foreach (Cannonball cannonball in enemies)
-                {
                     cannonball.Draw(gameTime, spriteBatch);
-                }
+
                 c.Draw(gameTime, spriteBatch);
                 spriteBatch.Draw(Textures.backgroundTexture, backgroundHealthBar, Color.White);
                 spriteBatch.Draw(Textures.healthTexture, curHealthBar, Color.Red);
+                spriteBatch.Draw(Textures.manaTexture, curManaBar, Color.Blue);
             }
             else // game is over
             {
-                //GameOverScreen g = new GameOverScreen();
-                //g.Draw(gameTime, spriteBatch);
+                GameOverScreen g = new GameOverScreen();
+                g.Draw(gameTime, spriteBatch);
             }
         }
 
@@ -232,80 +210,21 @@ namespace CastlesAndCannonsMonoGame
             return c;
         }
 
-        // TODO: Possible moving to Knight and implement in Knight Update?
-        private void Slash()
-        {
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-            {
-                mouseClick.X = Mouse.GetState().X;
-                mouseClick.Y = Mouse.GetState().Y;
-                if (c.GetType().Equals("Knight"))
-                {
-                    ((Knight)c).Slash(mouseClick);
-                    if (CheckSlashDirection(((Knight)c).SlashDirection) && !c.IsMoving)
-                    {
-                        switch (((Knight)c).SlashDirection)
-                        {
-                            case 1:
-                                ((Knight)c).SlashedPanel = panels[c.Row - 1, c.Column];
-                                break;
-                            case 2:
-                                ((Knight)c).SlashedPanel = panels[c.Row, c.Column + 1];
-                                break;
-                            case 3:
-                                ((Knight)c).SlashedPanel = panels[c.Row + 1, c.Column];
-                                break;
-                            case 4:
-                                ((Knight)c).SlashedPanel = panels[c.Row, c.Column - 1];
-                                break;
-                        }
-                        ((Knight)c).SlashedPanel.Slashed(true);
-                    }
-                }
-            }
-        }
-
-        // TODO: Document
-        private bool CheckSlashDirection(int slashDirection)
-        {
-            switch (slashDirection)
-            {
-                case 1:
-                    if (c.Row - 1 < 0)
-                        return false;
-                    break;
-                case 2:
-                    if (c.Column + 1 > GRID_SIZE - 1)
-                        return false;
-                    break;
-                case 3:
-                    if (c.Row + 1 > GRID_SIZE - 1)
-                        return false;
-                    break;
-                case 4:
-                    if (c.Column - 1 < 0)
-                        return false;
-                    break;
-            }
-            return true;
-        }
-
         // Spawns a single Cannonball.
         private void SpawnEnemies(GameTime gameTime)
         {
             float timer = enemySpawnTimer - elapsedGameTime;
             if (timer < 0)
             {
-                if (selectedPattern == Pattern.NOT_SELECTED)
-                {
+                if (selectedPattern == Pattern.NOT_SELECTED) {
                     selectedPattern = (Pattern)generator.Next(1, NUMBER_OF_PATTERNS + 1);
                 }
-                activatePattern();
+                ActivatePattern();
             }
         }
 
         // Performs one iteration of the currently selected Pattern.
-        private void activatePattern()
+        private void ActivatePattern()
         {
             Vector2 position = new Vector2();
             switch (selectedPattern)
@@ -327,7 +246,12 @@ namespace CastlesAndCannonsMonoGame
                     }
                 case Pattern.COMPLETELY_RANDOM:
                     {
-                        CompletelyRandom(position);
+                        ActivateCompletelyRandom(position);
+                        break;
+                    }
+                case Pattern.TARGET_SHOT:
+                    {
+                        ActivateTargetShot(position);
                         break;
                     }
             }
@@ -340,10 +264,10 @@ namespace CastlesAndCannonsMonoGame
         // from the right most column, it deselects itself.
         private void ActivateCascadingDown(Vector2 position)
         {
-            position = panels[0, patternCount].GetPosition();
+            position = panels[0, patternCount].Position;
             position.Y -= ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position));
-            checkToDeselect();
+            enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, CalculateSpeedFactor()));
+            CheckToDeselect();
         }
 
         // Activates one iteration in the Cascading Up pattern. The Pattern resembles
@@ -352,12 +276,11 @@ namespace CastlesAndCannonsMonoGame
         // the left most column, it then deselects itself.
         private void ActivateCascadingUp(Vector2 position)
         {
-            position = panels[GRID_SIZE - 1, patternCount].GetPosition();
+            position = panels[GRID_SIZE - 1, patternCount].Position;
             position.Y += ENEMY_SPAWN_BUFFER;
-            enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position));
-            checkToDeselect();
+            enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, CalculateSpeedFactor()));
+            CheckToDeselect();
         }
-
 
         // Activates one iteration of the MultiShot pattern. The MultiShot pattern fires
         // # of panels / 2 cannon balls first coming in from the right then coming in from the left
@@ -369,9 +292,9 @@ namespace CastlesAndCannonsMonoGame
             {
                 for (int i = 0; i < GRID_SIZE / 2; i++)
                 {
-                    position = panels[i * 2, 0].GetPosition();
+                    position = panels[i * 2, 0].Position;
                     position.X -= ENEMY_SPAWN_BUFFER;
-                    enemies.AddLast(new Cannonball(Cannonball.Direction.RIGHT, position));
+                    enemies.AddLast(new Cannonball(Cannonball.Direction.RIGHT, position, CalculateSpeedFactor()));
                 }
                 patternCount++;
             }
@@ -379,9 +302,9 @@ namespace CastlesAndCannonsMonoGame
             {
                 for (int i = 0; i < GRID_SIZE / 2; i++)
                 {
-                    position = panels[i * 2 + 1, GRID_SIZE - 1].GetPosition();
+                    position = panels[i * 2 + 1, GRID_SIZE - 1].Position;
                     position.X += ENEMY_SPAWN_BUFFER;
-                    enemies.AddLast(new Cannonball(Cannonball.Direction.LEFT, position));
+                    enemies.AddLast(new Cannonball(Cannonball.Direction.LEFT, position, CalculateSpeedFactor()));
                 }
                 patternCount++;
             }
@@ -389,9 +312,9 @@ namespace CastlesAndCannonsMonoGame
             {
                 for (int i = 0; i < GRID_SIZE / 2; i++)
                 {
-                    position = panels[GRID_SIZE - 1, i * 2 + 1].GetPosition();
+                    position = panels[GRID_SIZE - 1, i * 2 + 1].Position;
                     position.Y += ENEMY_SPAWN_BUFFER;
-                    enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position));
+                    enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, CalculateSpeedFactor()));
                 }
                 patternCount++;
             }
@@ -399,9 +322,9 @@ namespace CastlesAndCannonsMonoGame
             {
                 for (int i = 0; i < GRID_SIZE / 2; i++)
                 {
-                    position = panels[0, i * 2].GetPosition();
+                    position = panels[0, i * 2].Position;
                     position.Y -= ENEMY_SPAWN_BUFFER;
-                    enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position));
+                    enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, CalculateSpeedFactor()));
                 }
                 selectedPattern = Pattern.NOT_SELECTED;
                 patternCount = 0;
@@ -411,36 +334,61 @@ namespace CastlesAndCannonsMonoGame
         // Activates one iteration of the Completely Random pattern. The Random pattern fires
         // at random from any direction and from any Panel. After the pattern has fired GRID_SIZE
         // Cannonballs, the pattern deselects itself.
-        private void CompletelyRandom(Vector2 position)
+        private void ActivateCompletelyRandom(Vector2 position)
         {
-            Cannonball.Direction direction = (Cannonball.Direction)generator.Next(1, NUMBER_OF_PATTERNS + 1);
+            Cannonball.Direction direction = (Cannonball.Direction)generator.Next(1, 5);
             int index = generator.Next(GRID_SIZE);
             switch (direction)
             {
                 case Cannonball.Direction.UP: // going up, starts at bottom
-                    position = panels[GRID_SIZE - 1, index].GetPosition();
+                    position = panels[GRID_SIZE - 1, index].Position;
                     position.Y += ENEMY_SPAWN_BUFFER;
                     break;
                 case Cannonball.Direction.RIGHT: // going right, starts at left
-                    position = panels[index, 0].GetPosition();
+                    position = panels[index, 0].Position;
                     position.X -= ENEMY_SPAWN_BUFFER;
                     break;
                 case Cannonball.Direction.DOWN: // going down, starts at top
-                    position = panels[0, index].GetPosition();
+                    position = panels[0, index].Position;
                     position.Y -= ENEMY_SPAWN_BUFFER;
                     break;
                 case Cannonball.Direction.LEFT: // going left, starts at right
-                    position = panels[index, GRID_SIZE - 1].GetPosition();
+                    position = panels[index, GRID_SIZE - 1].Position;
                     position.X += ENEMY_SPAWN_BUFFER;
                     break;
             }
-            enemies.AddLast(new Cannonball(direction, position));
-            checkToDeselect();
+            enemies.AddLast(new Cannonball(direction, position, CalculateSpeedFactor()));
+            CheckToDeselect();
+        }
+
+        private void ActivateTargetShot(Vector2 position)
+        {
+            if (patternCount == 5)
+            {
+            position = panels[c.Row, 0].Position;
+            position.X -= ENEMY_SPAWN_BUFFER;
+                enemies.AddLast(new Cannonball(Cannonball.Direction.RIGHT, position, 3 + CalculateSpeedFactor()));
+            position = panels[c.Row, GRID_SIZE - 1].Position;
+            position.X += ENEMY_SPAWN_BUFFER;
+                enemies.AddLast(new Cannonball(Cannonball.Direction.LEFT, position, 3 + CalculateSpeedFactor()));
+            position = panels[GRID_SIZE - 1, c.Column].Position;
+            position.Y += ENEMY_SPAWN_BUFFER;
+                enemies.AddLast(new Cannonball(Cannonball.Direction.UP, position, 3 + CalculateSpeedFactor()));
+            position = panels[0, c.Column].Position;
+            position.Y -= ENEMY_SPAWN_BUFFER;
+                enemies.AddLast(new Cannonball(Cannonball.Direction.DOWN, position, 3 + CalculateSpeedFactor()));
+            selectedPattern = Pattern.NOT_SELECTED;
+            patternCount = 0;
+        }
+            else
+            {
+                patternCount++;
+            }
         }
 
         // Performs a check if the Pattern needs to be deselected. If the Pattern has fired
         // GRID_SIZE Cannonballs, it will deselect itself.
-        private void checkToDeselect()
+        private void CheckToDeselect()
         {
             patternCount++;
             if (patternCount == Grid.GRID_SIZE)
@@ -450,15 +398,50 @@ namespace CastlesAndCannonsMonoGame
             }
         }
 
-        public bool IsGameOver
+        private float CalculateSpeedFactor()
         {
-            get
+            float speed = (float)((80 * Math.Exp(.0000000005) * elapsedGameTime / 60) / (30 + 8 * Math.Exp(0000000005) * (elapsedGameTime / 60))) + 10;
+            return speed;
+        }
+
+        private void UpdateMouseClicks()
+        {
+            mousePosition.X = Mouse.GetState().X;
+            mousePosition.Y = Mouse.GetState().Y;
+
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                return isGameOver;
+                leftMouseClicked = true;
+                leftMouseClick.X = mousePosition.X;
+                leftMouseClick.Y = mousePosition.Y;
             }
+            else
+                leftMouseClicked = false;
+
+            if (Mouse.GetState().RightButton == ButtonState.Pressed)
+                rightMouseClicked = true;
+            else
+                rightMouseClicked = false;
+        }
+
+        /*******************
+        * GET/SET METHODS *
+        *******************/
+
+        // Updates the health bar with the new character health if it changed.
+        private int HealthBar
+        {
+            set {
+                curHealthBar.Width = value;
+            }
+        }
+
+        // Updates the mana bar with the new mana if it changed.
+        private int ManaBar
+        {
             set
             {
-                isGameOver = value;
+                curManaBar.Width = value;
             }
         }
 

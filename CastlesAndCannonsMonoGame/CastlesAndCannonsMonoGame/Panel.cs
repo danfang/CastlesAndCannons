@@ -15,6 +15,8 @@ namespace CastlesAndCannonsMonoGame
         private bool isSlashed;
         private bool isSelected;
         private Rectangle bounds;
+        private const int SLASH_DURATION = 25;
+        private int slashDurationTimer;
         public enum Type
         {
 
@@ -45,11 +47,19 @@ namespace CastlesAndCannonsMonoGame
 
         public void Update(GameTime gameTime, Point mousePosition)
         {
+            if (isSlashed && slashDurationTimer == 0)
+                slashDurationTimer = SLASH_DURATION;
+
+            if (slashDurationTimer > 0)
+                slashDurationTimer--;
+
+            if (slashDurationTimer == 0)
+                isSlashed = false;
+
             if (bounds.Contains(mousePosition))
                 isSelected = true;
             else
                 isSelected = false;
-
             
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -62,20 +72,37 @@ namespace CastlesAndCannonsMonoGame
                 spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.White);
         }
 
-        public Rectangle GetBounds()
+        /*******************
+         * GET/SET METHODS *
+        *******************/
+
+        public Rectangle Bounds
         {
-            return bounds;
+            get
+            {
+                return bounds;
+            }
         }
 
-        public Vector2 GetPosition()
+        public Vector2 Position
         {
-            Point p = bounds.Location;
-            return new Vector2(p.X, p.Y);
+            get
+            {
+                Point p = bounds.Location;
+                return new Vector2(p.X, p.Y);
+            }
         }
 
-        public void Slashed(bool newSlash)
+        public bool Slashed
         {
-            isSlashed = newSlash;
+            get
+            {
+                return isSlashed;
+            }
+            set 
+            {
+                isSlashed = value;
+            }
         }
     }
 }
