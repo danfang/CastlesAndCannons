@@ -159,10 +159,10 @@ namespace CastlesAndCannonsMonoGame
                     c.Health -= collide.Damage / 3;
                 else 
                 c.Health -= collide.Damage;
-                System.Diagnostics.Debug.WriteLine(c.Health);
+                //System.Diagnostics.Debug.WriteLine(c.Health);
                 if (c.Health == 0) // Character is dead
                 {
-                    System.Diagnostics.Debug.WriteLine("the character is dead");
+                    //System.Diagnostics.Debug.WriteLine("the character is dead");
                     isGameOver = false;
                 }
             }

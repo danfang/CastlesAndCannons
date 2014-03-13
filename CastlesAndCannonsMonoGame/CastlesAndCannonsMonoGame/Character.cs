@@ -27,6 +27,8 @@ namespace CastlesAndCannonsMonoGame
         protected bool isMoving;
         protected bool canPressKey;
         protected int direction;
+        protected Keys nextCommand;
+        protected Keys prevCommand;
 
         public Character(Vector2 pos, int newSize, int row, int col)
         {
@@ -43,6 +45,8 @@ namespace CastlesAndCannonsMonoGame
             movingBounds = new Rectangle((int)position.X + size/4, (int)position.Y + size/4, size / 2, size/ 2);
             isMoving = false;
             canPressKey = true;
+            nextCommand = Keys.None;
+            prevCommand = Keys.None;
         }
 
         public void UnloadContent()
@@ -61,33 +65,53 @@ namespace CastlesAndCannonsMonoGame
         public void MoveCharacter(Panel[, ] panels)
         {
             Keys[] pressed = Keyboard.GetState().GetPressedKeys();
-            if (pressed.Length == 0)
-            {
-                canPressKey = true;
-            }
             int tempRow = row;
             int tempCol = column;
-            if (pressed.Length > 0 && !isMoving && canPressKey)
+            if (pressed.Length == 0)
             {
-                if (pressed.Contains(Keys.A))
+                prevCommand = Keys.None;
+            }
+            else if (pressed.Length == 1) {
+                if (!pressed[0].Equals(prevCommand))
+                {
+                    //prevCommand = pressed[0];
+                    nextCommand = pressed[0];
+                }
+            }
+            else if (pressed.Length == 2 && isMoving)
+            {
+                if (pressed[0].Equals(prevCommand))
+                {
+                    //prevCommand = Keys.None;
+                    nextCommand = pressed[1];
+                }
+                else if (pressed[1].Equals(prevCommand))
+                {
+                    //prevCommand = Keys.None;
+                    nextCommand = pressed[0];
+                }
+            }
+            if (!nextCommand.Equals(Keys.None) && !isMoving && pressed.Length <= 1)
+            {
+                if (nextCommand.Equals(Keys.A))
                 {
                     direction = 3;
                     if (column > 0)
                         tempCol = column - 1;
                 }
-                else if (pressed.Contains(Keys.D))
+                else if (nextCommand.Equals(Keys.D))
                 {
                     direction = 1;
                     if (column < Math.Sqrt(panels.Length) - 1)
                         tempCol = column + 1;
                 }
-                else if (pressed.Contains(Keys.W))
+                else if (nextCommand.Equals(Keys.W))
                 {
                     direction = 0;
                     if (row > 0)
                         tempRow = row - 1;
                 }
-                else if (pressed.Contains(Keys.S))
+                else if (nextCommand.Equals(Keys.S))
                 {
                     direction = 2;
                     if (row < Math.Sqrt(panels.Length) - 1)
@@ -98,6 +122,9 @@ namespace CastlesAndCannonsMonoGame
                 row = tempRow;
                 canPressKey = false;
                 isMoving = true;
+                prevCommand = nextCommand;
+                nextCommand = Keys.None;
+                System.Diagnostics.Debug.WriteLine(prevCommand);
             }
             Move(panels[tempRow, tempCol].Position, tempRow, tempCol);
         }
@@ -141,13 +168,7 @@ namespace CastlesAndCannonsMonoGame
             }
             else
             {
-                //if (!newPos.Equals(position))
-                //{
-                //    row = newRow;
-                //    column = newCol;
-                //    desiredPos = newPos;
-                //    //isMoving = true;
-                //}
+
             }
             movingBounds.X = bounds.X + size / 4;
             movingBounds.Y = bounds.Y + size / 4;
