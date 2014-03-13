@@ -17,16 +17,25 @@ namespace CastlesAndCannonsMonoGame
         private Rectangle bounds;
         private const int SLASH_DURATION = 25;
         private int slashDurationTimer;
+        private Type panelType;
+        private int column;
+        private int row;
+        private float panelDespawn;
+
         public enum Type
         {
-
+            NORMAL, LAVA, WALL
         }
 
-        public Panel(int y, int x, int size)
+        public Panel(int x, int y, int size, int row, int column)
         {
             bounds = new Rectangle(x, y, size, size);
+            this.column = column;
+            this.row = row;
+            panelDespawn = 1f;
             isSelected = false;
             isSlashed = false;
+            panelType = Type.NORMAL;
             Initialize();
             LoadContent();
         }
@@ -60,18 +69,39 @@ namespace CastlesAndCannonsMonoGame
                 isSelected = true;
             else
                 isSelected = false;
-            
+
+            if (panelType != Type.NORMAL)
+            {
+                DespawnPanel();
+            }
         }
+
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (isSlashed)
                 spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.Red);
+            else if (panelType == Type.LAVA)
+                spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.Yellow);
             else if (isSelected)
-                spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.Green);
+                spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.LightPink);
             else
                 spriteBatch.Draw(Textures.normalPanelTexture, bounds, Color.White);
         }
 
+        private void DespawnPanel() {
+            float timer = panelDespawn - Grid.elapsedGameTime;
+            if (timer < 0)
+            {
+                panelType = Type.NORMAL;
+            }
+        }
+
+
+        public void SpawnPanel(Type type)
+        {
+            PanelType = Panel.Type.LAVA;
+            panelDespawn = Grid.elapsedGameTime + 5f;
+        }
         /*******************
          * GET/SET METHODS *
         *******************/
@@ -102,6 +132,34 @@ namespace CastlesAndCannonsMonoGame
             set 
             {
                 isSlashed = value;
+            }
+        }
+
+        public int Column
+        {
+            get
+            {
+                return column;
+            }
+        }
+
+        public int Row
+        {
+            get
+            {
+                return row;
+            }
+        }
+
+        public Type PanelType
+        {
+            get
+            {
+                return panelType;
+            }
+            set
+            {
+                panelType = value;
             }
         }
     }

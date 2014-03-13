@@ -43,6 +43,7 @@ namespace CastlesAndCannonsMonoGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            App.Current.DebugSettings.EnableFrameRateCounter = true;
             base.Initialize();
             height = graphics.GraphicsDevice.Viewport.Height;
             width = graphics.GraphicsDevice.Viewport.Width;
@@ -95,7 +96,7 @@ namespace CastlesAndCannonsMonoGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();

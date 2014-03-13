@@ -32,6 +32,7 @@ namespace CastlesAndCannonsMonoGame
         private int score; // to be implemented
         private int patternCount;
         private float enemySpawnTimer; // 
+        private float panelChangeTimer;
         private bool isGameOver;
         private Panel[,] panels;
         private LinkedList<Cannonball> enemies;
@@ -67,7 +68,7 @@ namespace CastlesAndCannonsMonoGame
             panels = new Panel[GRID_SIZE, GRID_SIZE];
             score = 0;
             enemies = new LinkedList<Cannonball>();
-            PANEL_SIZE = (Game1.height - 100) / GRID_SIZE;
+            PANEL_SIZE = (Game1.height - 200) / GRID_SIZE;
             GRID_WIDTH_OFFSET = (Game1.width - (PANEL_SIZE * GRID_SIZE)) / 2;
             GRID_HEIGHT_OFFSET = (Game1.height - (PANEL_SIZE * GRID_SIZE)) / 2;
             ENEMY_SPAWN_BUFFER = PANEL_SIZE * 3;
@@ -76,9 +77,10 @@ namespace CastlesAndCannonsMonoGame
             generator = new Random();
             selectedPattern = Pattern.NOT_SELECTED;
             enemySpawnTimer = 1f;
+            panelChangeTimer = 1f;
             patternCount = 0;
-            curHealthBar = new Rectangle(50, 20, 100, 20);
-            curManaBar = new Rectangle(50, 70, 100, 20);
+            curHealthBar = new Rectangle(0, 0, Game1.width / 2, Game1.height);
+            curManaBar = new Rectangle(Game1.width / 2, 0, Game1.width / 2, Game1.height);
         }
 
         // Creates the actual Grid and puts the Character in the Grid.
@@ -87,7 +89,7 @@ namespace CastlesAndCannonsMonoGame
             for (int row = 0; row < GRID_SIZE; row++)
             {
                 for (int col = 0; col < GRID_SIZE; col++)
-                    panels[row, col] = new Panel(GRID_HEIGHT_OFFSET + row * PANEL_SIZE, GRID_WIDTH_OFFSET + col * PANEL_SIZE, PANEL_SIZE);
+                    panels[row, col] = new Panel(GRID_WIDTH_OFFSET + col * PANEL_SIZE, GRID_HEIGHT_OFFSET + row * PANEL_SIZE, PANEL_SIZE, row, col);
                 }
             c = new Knight(panels[2, 2].Position, PANEL_SIZE, 2, 2);
             }
@@ -112,6 +114,7 @@ namespace CastlesAndCannonsMonoGame
                     p.Update(gameTime, mousePosition);
                 }
                 SpawnEnemies(gameTime);
+                ChangePanels(gameTime);
                 UpdateCannonballs(gameTime);
                 if (c.GetType().Equals(typeof(Knight)))
                 ((Knight)c).Update(gameTime, panels);
@@ -180,12 +183,13 @@ namespace CastlesAndCannonsMonoGame
             }
         }
 
-
         // Draws the Grid, Cannonballs, Knight, and health/mana bars.
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (!isGameOver)
             {
+                spriteBatch.Draw(Textures.healthTexture, curHealthBar, Color.White);
+                spriteBatch.Draw(Textures.manaTexture, curManaBar, Color.White);
                 foreach (Panel p in panels)
                     p.Draw(gameTime, spriteBatch);
 
@@ -193,9 +197,6 @@ namespace CastlesAndCannonsMonoGame
                     cannonball.Draw(gameTime, spriteBatch);
 
                 c.Draw(gameTime, spriteBatch);
-                spriteBatch.Draw(Textures.backgroundTexture, backgroundHealthBar, Color.White);
-                spriteBatch.Draw(Textures.healthTexture, curHealthBar, Color.Red);
-                spriteBatch.Draw(Textures.manaTexture, curManaBar, Color.Blue);
             }
             else // game is over
             {
@@ -223,6 +224,21 @@ namespace CastlesAndCannonsMonoGame
             }
         }
 
+        private void ChangePanels(GameTime gameTime)
+        {
+            float timer = panelChangeTimer - elapsedGameTime;
+            if (timer < 0)
+            {
+                Panel p = panels[generator.Next(0, GRID_SIZE), generator.Next(0, GRID_SIZE)];
+                // chooses a random grid that the character is not currently standing on 
+                while (c.Column == p.Column && c.Row == p.Row) 
+                {
+                    p = panels[generator.Next(0, GRID_SIZE), generator.Next(0, GRID_SIZE)];
+                }
+                p.SpawnPanel(Panel.Type.LAVA);
+                panelChangeTimer = elapsedGameTime + 5f;
+            }
+        }
         // Performs one iteration of the currently selected Pattern.
         private void ActivatePattern()
         {
@@ -432,7 +448,7 @@ namespace CastlesAndCannonsMonoGame
         private int HealthBar
         {
             set {
-                curHealthBar.Width = value;
+                curHealthBar.Width = (int) ((Game1.width / 2) * (value / 100f));
             }
         }
 
@@ -441,7 +457,7 @@ namespace CastlesAndCannonsMonoGame
         {
             set
             {
-                curManaBar.Width = value;
+                curManaBar.Width = (int) ((Game1.width / 2) * (value / 100f));
             }
         }
 
